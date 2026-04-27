@@ -41,6 +41,8 @@ import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
 import DebugModal from '../debug-modal/debug-modal.jsx';
+import TutorialPanel from '../tutorial-panel/tutorial-panel.jsx';
+import getScenario from '../../assets/scenarios/scenario-map.js';
 
 const messages = defineMessages({
     addExtension: {
@@ -253,6 +255,10 @@ const GUIComponent = props => {
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
+                        <TutorialPanel
+                            scenario={getScenario()}
+                            vm={vm}
+                        />
                         <Box className={styles.editorWrapper}>
                             <Tabs
                                 forceRenderTabPanel

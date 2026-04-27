@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(nvm version *)",
+      "Bash(npm list *)",
+      "PowerShell(npm list -g --depth=0)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\a160c\\Documents\\ClaudeCode\\switchonlab-scratch\\src\\components"
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "L5",
+  "title": "ランダムな位置から落とそう",
+  "steps": [
+    {
+      "id": "l5-step1",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "「乱数」ブロックを探そう",
+      "body": "今回はリンゴが落ちてくるx座標を変えるのです！緑の「演算」カテゴリを開いてみるのです。「〇から〇までの乱数」というブロックを見つけたら準備OK！",
+      "concept": "乱数とは、決められた範囲の中で毎回バラバラな数字が出てくる仕組みなのです！サイコロを振るたびに違う数字が出るのと同じイメージなのです。これを使うと、リンゴが毎回違う場所から落ちてくるのです！",
+      "conceptImage": "asuka_surprise",
+      "conditions": [
+        { "type": "blockExists", "opcode": "operator_random" }
+      ]
+    },
+    {
+      "id": "l5-step2",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "x座標を乱数に差し替えよう",
+      "body": "L4で置いた「x座標を〇、y座標を160にする」ブロックを見るのです。x座標の「0」の部分に「-200から200までの乱数」をはめ込むのです！0を乱数ブロックに差し替えるだけ！",
+      "concept": "-200から200の意味を説明するのです！Scratchのステージの横幅はだいたい-240から240なのです。-200から200の範囲にするとリンゴが画面の端ギリギリでなくちょうど良い範囲から落ちてくるのです！",
+      "conceptImage": "asuka_surprise",
+      "conditions": [
+        { "type": "blockExists", "opcode": "operator_random" },
+        { "type": "inputValue", "opcode": "motion_gotoxy", "field": "Y", "value": 160 }
+      ]
+    },
+    {
+      "id": "l5-step3",
+      "navigatorImage": "asuka_smile1",
+      "targetName": "Apple",
+      "title": "緑の旗を何度も押して確認しよう",
+      "body": "完成したら緑の旗ボタンを何度も押してみるのです！リンゴが毎回違う場所から落ちてきたら大成功！確認できたら「チェックしよう！」ボタンを押すのです。",
+      "hintImage": "l5_hint.png",
+      "hintNote": "x座標の「0」の部分が乱数ブロックになっていますか？数字の上に乱数をドラッグしてみるのです！",
+      "conditions": [
+        { "type": "randomInXPosition", "from": -200, "to": 200 },
+        { "type": "blockExists", "opcode": "control_forever" },
+        { "type": "inputValue", "opcode": "motion_changeyby", "field": "DY", "value": -7 }
+      ]
+    }
+  ],
+  "success": {
+    "navigatorImage": "asuka_joy",
+    "message": "やりました！🎉\nたった1か所変えるだけでグッとゲームらしくなりましたね！\n次はいよいよカゴでリンゴをキャッチするのです！"
+  },
+  "failure": {
+    "navigatorImage": "asuka_sad",
+    "message": "もう少しなのです…！\nx座標の「0」の部分が乱数ブロックに\nなっていますか？\n数字の上に乱数をドラッグしてみるのです！"
+  }
+}

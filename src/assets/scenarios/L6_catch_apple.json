@@ -1,0 +1,87 @@
+{
+  "id": "L6",
+  "title": "キャッチしよう",
+  "steps": [
+    {
+      "id": "l6-step1",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "「もしBowlに触れたなら」を追加しよう",
+      "body": "いよいよキャッチ判定を作るのです！Appleの「ずっと」の中の「y座標を-7ずつ変える」の下に「もし〜なら」ブロックを追加するのです。六角形の穴には「調べる」カテゴリから「〇に触れた」を選んで「Bowl」に設定！",
+      "concept": "「もしBowlに触れたなら」はリンゴがカゴに触れているかどうかをずっと確認し続けるのです。触れた瞬間に中の処理が動く仕組みなのです！",
+      "conceptImage": "asuka_surprise",
+      "conditions": [
+        { "type": "blockExists", "opcode": "control_if" },
+        { "type": "blockExists", "opcode": "sensing_touchingobject" }
+      ]
+    },
+    {
+      "id": "l6-step2",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "「隠す」ブロックを入れよう",
+      "body": "「もし〜なら」の中に「見た目」カテゴリから「隠す」ブロックを入れるのです！カゴに触れた瞬間にリンゴが消えるのです！",
+      "conditions": [
+        { "type": "blockExists", "opcode": "looks_hide" }
+      ]
+    },
+    {
+      "id": "l6-step3",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "乱数で上に戻すブロックを入れよう",
+      "body": "「隠す」の下に「x座標を〇、y座標を160にする」を追加するのです。x座標はL5と同じように-200から200までの乱数！リンゴが消えた後また上のランダムな位置に戻るのです！",
+      "conditions": [
+        { "type": "blockExists", "opcode": "looks_hide" },
+        { "type": "randomValue", "from": -200, "to": 200 },
+        { "type": "inputValue", "opcode": "motion_gotoxy", "field": "Y", "value": 160 }
+      ]
+    },
+    {
+      "id": "l6-step4",
+      "navigatorImage": "asuka_smile1",
+      "targetName": "Apple",
+      "title": "「0.1秒待つ」ブロックを入れよう",
+      "body": "乱数のブロックの下に「制御」カテゴリから「〇秒待つ」ブロックを入れるのです。数字は0.1！",
+      "concept": "なぜ待つ必要があるのです？待ち時間なしだとリンゴが瞬間移動した先でもすぐにキャッチ判定が動いてしまうのです。0.1秒待つことで判定がリセットされて正しく動くのです！短い時間でもプログラムには大きな意味があるのです！",
+      "conceptImage": "asuka_surprise",
+      "conditions": [
+        { "type": "inputValue", "opcode": "control_wait", "field": "DURATION", "value": 0.1 }
+      ]
+    },
+    {
+      "id": "l6-step5",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "「表示する」ブロックを入れよう",
+      "body": "最後に「見た目」カテゴリから「表示する」ブロックを一番下に入れるのです！隠れていたリンゴが新しい場所に現れるのです！",
+      "conditions": [
+        { "type": "blockExists", "opcode": "looks_show" }
+      ]
+    },
+    {
+      "id": "l6-step6",
+      "navigatorImage": "asuka_smile1",
+      "targetName": "Apple",
+      "title": "緑の旗を押して確認しよう",
+      "body": "完成したら緑の旗ボタンを押してカゴでリンゴをキャッチしてみるのです！リンゴが消えてまた上から落ちてきたら大成功！確認できたら「チェックしよう！」ボタンを押すのです。",
+      "hintImage": "l6_hint.png",
+      "hintNote": "「もし〜なら」の中に「隠す」→「乱数位置」→「0.1秒待つ」→「表示する」の順番になっていますか？順番が大切なのです！",
+      "conditions": [
+        { "type": "touchingObjectInForever", "objectName": "Bowl" },
+        { "type": "insideTouchingBowl", "childOpcode": "looks_hide" },
+        { "type": "insideTouchingBowl", "childOpcode": "looks_show" },
+        { "type": "insideTouchingBowl", "childOpcode": "control_wait", "field": "DURATION", "fieldValue": 0.1 },
+        { "type": "randomInXInsideTouchingBowl", "from": -200, "to": 200, "y": 160 }
+      ]
+    }
+  ],
+  "success": {
+    "navigatorImage": "asuka_joy",
+    "message": "やりました！🎉\nついにキャッチできましたね！\nゲームらしくなってきたのです！\n次はスコアをつけてもっと楽しくするのです！"
+  },
+  "failure": {
+    "navigatorImage": "asuka_sad",
+    "message": "もう少しなのです…！\n「もし〜なら」の中に\n「隠す」→「乱数位置」→「0.1秒待つ」→「表示する」\nの順番になっていますか？順番が大切なのです！"
+  }
+}

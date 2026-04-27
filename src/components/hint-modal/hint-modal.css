@@ -1,0 +1,90 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    z-index: 9998;
+    pointer-events: none;
+}
+
+.modal {
+    position: fixed;
+    left: 220px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 360px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    pointer-events: all;
+    z-index: 9999;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background-color: #4361EE;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 16px 16px 0 0;
+}
+
+.closeButton {
+    border: none;
+    background: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    font-weight: bold;
+}
+
+.closeButton:hover {
+    opacity: 0.6;
+}
+
+.imageArea {
+    padding: 20px 20px 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+}
+
+.hintImage {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #ccc;
+    font-size: 48px;
+}
+
+.placeholderText {
+    font-size: 13px;
+    color: #bbb;
+}
+
+.noteArea {
+    padding: 12px 20px 20px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #555;
+    border-top: 1px solid #f5f5f5;
+    white-space: pre-wrap;
+}

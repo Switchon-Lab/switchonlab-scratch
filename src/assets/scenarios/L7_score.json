@@ -1,0 +1,73 @@
+{
+  "id": "L7",
+  "title": "スコアをつけよう",
+  "steps": [
+    {
+      "id": "l7-step0",
+      "navigatorImage": "asuka_default",
+      "title": "Appleスプライトを確認しよう",
+      "body": "このレッスンはリンゴ（Apple）にスコアのプログラムを追加するのです！画面右下のスプライト一覧を見ると「Apple」が選択されているのです。このままAppleのスクリプトを作っていくのです！",
+      "conditions": [
+        { "type": "targetSelected", "name": "Apple" }
+      ]
+    },
+    {
+      "id": "l7-step1",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "スコアの変数を作ろう",
+      "body": "まず「スコア」という変数を作るのです！オレンジの「変数」カテゴリを開いて「変数を作る」をクリック！名前は「スコア」にしてOKを押すのです。",
+      "concept": "変数とは、数字や文字を入れておく「箱」のようなものなのです！「スコア」という名前の箱に点数を入れておいてキャッチするたびに増やしていくのです！",
+      "conceptImage": "asuka_surprise",
+      "conditions": [
+        { "type": "variableExists", "name": "スコア" }
+      ]
+    },
+    {
+      "id": "l7-step2",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "「スコアを0にする」を追加しよう",
+      "body": "「緑の旗が押されたとき」のすぐ下に「変数」カテゴリから「スコアを0にする」を追加するのです！ゲームスタート時にスコアをリセット！",
+      "concept": "なぜ最初に0にするのです？緑の旗を押すたびにスコアが引き継がれてしまうとゲームとしておかしくなるのです。ゲームスタート時に必ず0に戻す習慣をつけるのです！",
+      "conceptImage": "asuka_surprise",
+      "conditions": [
+        { "type": "variableExists", "name": "スコア" },
+        { "type": "blockExists", "opcode": "data_setvariableto" }
+      ]
+    },
+    {
+      "id": "l7-step3",
+      "navigatorImage": "asuka_default",
+      "targetName": "Apple",
+      "title": "「スコアを〇ずつ変える」を追加しよう",
+      "body": "L6で作った「もしBowlに触れたなら」の中「隠す」ブロックの上に「スコアを〇ずつ変える」を追加するのです！〇の数字は自由に設定してOKなのです！1点でも5点でも10点でも好きな点数にしてみるのです！",
+      "conditions": [
+        { "type": "blockExists", "opcode": "data_changevariableby" }
+      ]
+    },
+    {
+      "id": "l7-step4",
+      "navigatorImage": "asuka_smile1",
+      "targetName": "Apple",
+      "title": "緑の旗を押して確認しよう",
+      "body": "完成したら緑の旗ボタンを押してリンゴをキャッチしてみるのです！画面左上のスコアが増えていったら大成功！確認できたら「チェックしよう！」ボタンを押すのです。",
+      "hintImage": "l7_hint.png",
+      "hintNote": "「スコアを0にする」は旗ブロックのすぐ下に入っていますか？「スコアを1ずつ変える」は「もしBowlに触れたなら」の中に入っていますか？",
+      "conditions": [
+        { "type": "variableExists", "name": "スコア" },
+        { "type": "variableVisible", "name": "スコア" },
+        { "type": "scoreResetAtStart" },
+        { "type": "scoreIncrementInsideBowlIf" }
+      ]
+    }
+  ],
+  "success": {
+    "navigatorImage": "asuka_joy",
+    "message": "やりましたなのです！🎉\nスコアがどんどん増えていきますね！\nいよいよ次が最後のレッスンなのです！\nゲームオーバーを作って完成させるのです！"
+  },
+  "failure": {
+    "navigatorImage": "asuka_sad",
+    "message": "もう少しなのです…！\n「スコアを0にする」は旗ブロックのすぐ下に\n入っていますか？\n「スコアを1ずつ変える」は\n「もしBowlに触れたなら」の中に\n入っていますか？確認するのです！"
+  }
+}
