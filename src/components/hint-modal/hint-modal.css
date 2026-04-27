@@ -66,6 +66,12 @@
     border-radius: 8px;
 }
 
+.navigatorImage {
+    max-width: 130px;
+    max-height: 130px;
+    object-fit: contain;
+}
+
 .placeholder {
     display: flex;
     flex-direction: column;

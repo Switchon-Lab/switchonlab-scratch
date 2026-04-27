@@ -26,38 +26,119 @@ const NAVIGATOR_IMAGES = {
 
 const getImage = key => NAVIGATOR_IMAGES[key] || asukaDefault;
 
+// Scratchカテゴリ名と対応する色
+const CATEGORY_STYLES = {
+    '動き':       {color: '#4C97FF', fontWeight: 'bold'},
+    '見た目':     {color: '#9966FF', fontWeight: 'bold'},
+    '音':         {color: '#CF63CF', fontWeight: 'bold'},
+    'イベント':   {color: '#B8860B', fontWeight: 'bold'},
+    '制御':       {color: '#FF8C1A', fontWeight: 'bold'},
+    '調べる':     {color: '#5CB1D6', fontWeight: 'bold'},
+    '演算':       {color: '#59C059', fontWeight: 'bold'},
+    '変数':       {color: '#FF8C1A', fontWeight: 'bold'},
+    'ブロック定義': {color: '#FF6680', fontWeight: 'bold'},
+};
+
+const CATEGORY_KEYS = Object.keys(CATEGORY_STYLES).sort((a, b) => b.length - a.length);
+const TOKEN_RE = new RegExp(`「[^」]*」|${CATEGORY_KEYS.join('|')}|[。？！]`, 'g');
+
+// テキストを装飾付きReact要素に変換
+// ③ 。？！で改行 ④ カテゴリ名を色付き太字 ⑤ 「」内のブロック名を太字
+const formatBody = (text, keyPrefix) => {
+    const elements = [];
+    const lines = text.split('\n');
+    lines.forEach((line, lineIdx) => {
+        if (lineIdx > 0) elements.push(<br key={`${keyPrefix}-nl-${lineIdx}`} />);
+        const tokens = [];
+        let pos = 0;
+        TOKEN_RE.lastIndex = 0;
+        let match;
+        while ((match = TOKEN_RE.exec(line)) !== null) {
+            if (match.index > pos) {
+                tokens.push({type: 'text', value: line.slice(pos, match.index)});
+            }
+            const val = match[0];
+            if (val.startsWith('「')) {
+                tokens.push({type: 'block', value: val});
+            } else if (val === '。' || val === '？' || val === '！') {
+                tokens.push({type: 'punct', value: val});
+            } else {
+                tokens.push({type: 'category', value: val});
+            }
+            pos = match.index + val.length;
+        }
+        if (pos < line.length) {
+            tokens.push({type: 'text', value: line.slice(pos)});
+        }
+        tokens.forEach((token, tokenIdx) => {
+            const key = `${keyPrefix}-${lineIdx}-${tokenIdx}`;
+            if (token.type === 'text') {
+                elements.push(<span key={key}>{token.value}</span>);
+            } else if (token.type === 'block') {
+                const inner = token.value.slice(1, -1);
+                if (CATEGORY_STYLES[inner]) {
+                    // カテゴリ名が「」で囲まれている場合は色付き太字
+                    elements.push(
+                        <strong key={key} style={CATEGORY_STYLES[inner]}>{token.value}</strong>
+                    );
+                } else {
+                    elements.push(<strong key={key}>{token.value}</strong>);
+                }
+            } else if (token.type === 'category') {
+                elements.push(
+                    <span key={key} style={CATEGORY_STYLES[token.value]}>{token.value}</span>
+                );
+            } else if (token.type === 'punct') {
+                elements.push(<span key={key}>{token.value}</span>);
+                // 同一行にまだ内容があるときだけ改行を挿入
+                const hasMore = tokens.slice(tokenIdx + 1).some(t => t.value.trim() !== '');
+                if (hasMore) {
+                    elements.push(<br key={`${key}-br`} />);
+                }
+            }
+        });
+    });
+    return elements;
+};
+
+const CONCEPT_IMAGES = ['asuka_joy', 'asuka_smile2', 'asuka_surprise'];
+
 const TutorialPanel = ({scenario, vm}) => {
     const [currentStep, setCurrentStep] = useState(0);
-    const [showConcept, setShowConcept] = useState(false);
+    const [showConceptModal, setShowConceptModal] = useState(false);
     const [showHintModal, setShowHintModal] = useState(false);
     const [result, setResult] = useState(null); // null | 'success' | 'failure'
+    const [conceptImageKey, setConceptImageKey] = useState('asuka_surprise');
 
-    const {steps, success, failure, title} = scenario;
+    const {steps, success, failure, title, id} = scenario;
     const totalSteps = steps.length;
     const isLastStep = currentStep === totalSteps - 1;
     const step = steps[currentStep];
     const hasHint = step.hintImage || step.hintNote;
+    const panelTitle = id ? `${id}: ${title}` : title;
 
     const handlePrev = () => {
         setCurrentStep(i => i - 1);
-        setShowConcept(false);
+        setShowConceptModal(false);
         setShowHintModal(false);
     };
 
     const handleNext = () => {
         setCurrentStep(i => i + 1);
-        setShowConcept(false);
+        setShowConceptModal(false);
         setShowHintModal(false);
     };
 
     const handleCheck = () => {
         const passed = checkConditions(vm, step.conditions, step.targetName);
         setResult(passed ? 'success' : 'failure');
+        setShowConceptModal(false);
         setShowHintModal(false);
     };
 
     const handleRetry = () => {
         setResult(null);
+        setShowConceptModal(false);
         setShowHintModal(false);
     };
 
@@ -66,7 +147,7 @@ const TutorialPanel = ({scenario, vm}) => {
         const navigatorKey = result === 'success' ? 'asuka_joy' : 'asuka_sad';
         return (
             <div className={styles.tutorialPanel}>
-                <div className={styles.panelHeader}>{title}</div>
+                <div className={styles.panelHeader}>{panelTitle}</div>
                 <div className={styles.iconArea}>
                     <img
                         className={styles.iconImage}
@@ -100,6 +181,7 @@ const TutorialPanel = ({scenario, vm}) => {
                 </div>
                 {showHintModal && (
                     <HintModal
+                        title={'💡 ヒント！'}
                         hintImage={step.hintImage}
                         hintNote={step.hintNote}
                         onClose={() => setShowHintModal(false)}
@@ -111,7 +193,7 @@ const TutorialPanel = ({scenario, vm}) => {
 
     return (
         <div className={styles.tutorialPanel}>
-            <div className={styles.panelHeader}>{title}</div>
+            <div className={styles.panelHeader}>{panelTitle}</div>
             <div className={styles.iconArea}>
                 <img
                     className={styles.iconImage}
@@ -120,35 +202,22 @@ const TutorialPanel = ({scenario, vm}) => {
                 />
             </div>
             <div className={styles.stepIndicator}>
-                {`${currentStep + 1} / ${totalSteps}`}
+                {`Step ${currentStep + 1} / ${totalSteps}`}
             </div>
             <div className={styles.stepTitle}>{step.title}</div>
-            <div className={styles.descriptionArea}>{step.body}</div>
-
-            {showConcept && step.concept && (
-                <div className={styles.conceptBox}>
-                    {step.conceptImage && (
-                        <img
-                            className={styles.conceptImage}
-                            src={getImage(step.conceptImage)}
-                            alt="コンセプト"
-                        />
-                    )}
-                    <p className={styles.conceptText}>
-                        {step.concept.split('\n').map((line, i) => (
-                            <span key={i}>{line}<br /></span>
-                        ))}
-                    </p>
-                </div>
-            )}
+            <div className={styles.descriptionArea}>{formatBody(step.body, 'body')}</div>
 
             <div className={styles.buttonArea}>
                 {step.concept && (
                     <button
                         className={styles.hintButton}
-                        onClick={() => setShowConcept(h => !h)}
+                        onClick={() => {
+                            const randomKey = CONCEPT_IMAGES[Math.floor(Math.random() * CONCEPT_IMAGES.length)];
+                            setConceptImageKey(randomKey);
+                            setShowConceptModal(true);
+                        }}
                     >
-                        {showConcept ? '💡 ポイント解説を閉じる' : '💡 ポイント解説を見る'}
+                        {'💡 ポイント解説を見る'}
                     </button>
                 )}
                 {hasHint && (
@@ -188,9 +257,19 @@ const TutorialPanel = ({scenario, vm}) => {
 
             {showHintModal && (
                 <HintModal
+                    title={'💡 ヒント！'}
                     hintImage={step.hintImage}
                     hintNote={step.hintNote}
                     onClose={() => setShowHintModal(false)}
+                />
+            )}
+            {showConceptModal && step.concept && (
+                <HintModal
+                    title={'💡 ポイント解説'}
+                    headerColor={'#2E7D32'}
+                    navigatorImage={getImage(conceptImageKey)}
+                    conceptText={step.concept}
+                    onClose={() => setShowConceptModal(false)}
                 />
             )}
         </div>

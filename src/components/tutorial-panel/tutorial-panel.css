@@ -24,13 +24,13 @@
     justify-content: center;
     align-items: center;
     padding: 16px;
-    min-height: 140px;
+    min-height: 170px;
     background-color: white;
 }
 
 .iconImage {
-    max-width: 120px;
-    max-height: 120px;
+    max-width: 150px;
+    max-height: 150px;
     object-fit: contain;
 }
 
@@ -47,8 +47,8 @@
 
 .descriptionArea {
     padding: 12px 16px;
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 18px;
+    line-height: 1.8;
     color: #333;
     min-height: 80px;
     flex-grow: 1;
@@ -64,7 +64,7 @@
 
 .stepTitle {
     padding: 6px 16px 4px;
-    font-size: 13px;
+    font-size: 18px;
     font-weight: bold;
     color: #FF6B35;
     line-height: 1.4;
