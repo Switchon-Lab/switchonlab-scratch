@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import VM from 'scratch-vm';
 import styles from './tutorial-panel.css';
 import HintModal from '../hint-modal/hint-modal.jsx';
+import RoadmapModal from '../roadmap-modal/roadmap-modal.jsx';
 import checkConditions from '../../lib/check-conditions.js';
 
 import asukaDefault from '../../assets/navigator/asuka_default.png';
@@ -108,6 +109,7 @@ const TutorialPanel = ({scenario, vm}) => {
     const [showConceptModal, setShowConceptModal] = useState(false);
     const [showHintModal, setShowHintModal] = useState(false);
     const [result, setResult] = useState(null); // null | 'success' | 'failure'
+    const [showRoadmapModal, setShowRoadmapModal] = useState(false);
     const [conceptImageKey, setConceptImageKey] = useState('asuka_surprise');
 
     const {steps, success, failure, title, id} = scenario;
@@ -116,6 +118,7 @@ const TutorialPanel = ({scenario, vm}) => {
     const step = steps[currentStep];
     const hasHint = step.hintImage || step.hintNote;
     const panelTitle = id ? `${id}: ${title}` : title;
+    const lessonNo = id ? parseInt(id.replace(/\D/g, ''), 10) : 0;
 
     const handlePrev = () => {
         setCurrentStep(i => i - 1);
@@ -174,7 +177,7 @@ const TutorialPanel = ({scenario, vm}) => {
                     )}
                     <button
                         className={styles.checkButton}
-                        onClick={result === 'success' ? handleRetry : handleRetry}
+                        onClick={result === 'success' ? () => setShowRoadmapModal(true) : handleRetry}
                     >
                         {result === 'success' ? '次のレッスンへ' : 'やり直す'}
                     </button>
@@ -185,6 +188,12 @@ const TutorialPanel = ({scenario, vm}) => {
                         hintImage={step.hintImage}
                         hintNote={step.hintNote}
                         onClose={() => setShowHintModal(false)}
+                    />
+                )}
+                {showRoadmapModal && (
+                    <RoadmapModal
+                        currentLessonNo={lessonNo}
+                        onClose={() => setShowRoadmapModal(false)}
                     />
                 )}
             </div>
