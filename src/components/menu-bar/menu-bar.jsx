@@ -474,8 +474,8 @@ class MenuBar extends React.Component {
                                 >
                                     <MenuSection>
                                         <MenuItem
+                                            disabled
                                             isRtl={this.props.isRtl}
-                                            onClick={this.handleClickNew}
                                         >
                                             {newProjectMessage}
                                         </MenuItem>
@@ -501,7 +501,7 @@ class MenuBar extends React.Component {
                                     )}
                                     <MenuSection>
                                         <MenuItem
-                                            onClick={this.props.onStartSelectingFileUpload}
+                                            disabled
                                         >
                                             {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
                                         </MenuItem>

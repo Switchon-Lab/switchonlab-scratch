@@ -62,17 +62,19 @@ Submenu.propTypes = {
 const MenuItem = ({
     children,
     className,
+    disabled = false,
     expanded = false,
     onClick
 }) => (
     <li
         className={classNames(
             styles.menuItem,
-            styles.hoverable,
+            {[styles.hoverable]: !disabled},
+            {[styles.disabled]: disabled},
             className,
             {[styles.expanded]: expanded}
         )}
-        onClick={onClick}
+        onClick={disabled ? undefined : onClick}
     >
         {children}
     </li>
@@ -81,6 +83,7 @@ const MenuItem = ({
 MenuItem.propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
+    disabled: PropTypes.bool,
     expanded: PropTypes.bool,
     onClick: PropTypes.func
 };
