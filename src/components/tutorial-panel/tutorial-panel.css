@@ -6,8 +6,17 @@
     height: 100%;
     background-color: #FFF8F0;
     border-right: 1px solid #FFD6B8;
-    overflow-y: auto;
+    overflow: hidden;
     z-index: 10;
+}
+
+.topArea {
+    flex-shrink: 0;
+}
+
+.bottomArea {
+    flex-shrink: 0;
+    border-top: 1px solid #FFD6B8;
 }
 
 .panelHeader {
@@ -50,8 +59,8 @@
     font-size: 18px;
     line-height: 1.8;
     color: #333;
-    min-height: 80px;
-    flex-grow: 1;
+    flex: 1;
+    overflow-y: auto;
     background-color: #FFF8F0;
 }
 

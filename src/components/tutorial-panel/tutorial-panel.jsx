@@ -151,12 +151,14 @@ const TutorialPanel = ({scenario, vm}) => {
         return (
             <div className={styles.tutorialPanel}>
                 <div className={styles.panelHeader}>{panelTitle}</div>
-                <div className={styles.iconArea}>
-                    <img
-                        className={styles.iconImage}
-                        src={getImage(navigatorKey)}
-                        alt="キャラクター"
-                    />
+                <div className={styles.topArea}>
+                    <div className={styles.iconArea}>
+                        <img
+                            className={styles.iconImage}
+                            src={getImage(navigatorKey)}
+                            alt="キャラクター"
+                        />
+                    </div>
                 </div>
                 <div className={classNames(
                     styles.descriptionArea,
@@ -166,21 +168,23 @@ const TutorialPanel = ({scenario, vm}) => {
                         <span key={i}>{line}<br /></span>
                     ))}
                 </div>
-                <div className={styles.buttonArea}>
-                    {result === 'failure' && (step.hintImage || step.hintNote) && (
+                <div className={styles.bottomArea}>
+                    <div className={styles.buttonArea}>
+                        {result === 'failure' && (step.hintImage || step.hintNote) && (
+                            <button
+                                className={styles.hintModalButton}
+                                onClick={() => setShowHintModal(true)}
+                            >
+                                {'💡 ヒントを見てみるのです！'}
+                            </button>
+                        )}
                         <button
-                            className={styles.hintModalButton}
-                            onClick={() => setShowHintModal(true)}
+                            className={styles.checkButton}
+                            onClick={result === 'success' ? () => setShowRoadmapModal(true) : handleRetry}
                         >
-                            {'💡 ヒントを見てみるのです！'}
+                            {result === 'success' ? '次のレッスンへ' : 'やり直す'}
                         </button>
-                    )}
-                    <button
-                        className={styles.checkButton}
-                        onClick={result === 'success' ? () => setShowRoadmapModal(true) : handleRetry}
-                    >
-                        {result === 'success' ? '次のレッスンへ' : 'やり直す'}
-                    </button>
+                    </div>
                 </div>
                 {showHintModal && (
                     <HintModal
@@ -203,65 +207,67 @@ const TutorialPanel = ({scenario, vm}) => {
     return (
         <div className={styles.tutorialPanel}>
             <div className={styles.panelHeader}>{panelTitle}</div>
-            <div className={styles.iconArea}>
-                <img
-                    className={styles.iconImage}
-                    src={getImage(step.navigatorImage)}
-                    alt="キャラクター"
-                />
+            <div className={styles.topArea}>
+                <div className={styles.iconArea}>
+                    <img
+                        className={styles.iconImage}
+                        src={getImage(step.navigatorImage)}
+                        alt="キャラクター"
+                    />
+                </div>
+                <div className={styles.stepIndicator}>
+                    {`Step ${currentStep + 1} / ${totalSteps}`}
+                </div>
+                <div className={styles.stepTitle}>{step.title}</div>
             </div>
-            <div className={styles.stepIndicator}>
-                {`Step ${currentStep + 1} / ${totalSteps}`}
-            </div>
-            <div className={styles.stepTitle}>{step.title}</div>
             <div className={styles.descriptionArea}>{formatBody(step.body, 'body')}</div>
-
-            <div className={styles.buttonArea}>
-                {step.concept && (
+            <div className={styles.bottomArea}>
+                <div className={styles.buttonArea}>
+                    {step.concept && (
+                        <button
+                            className={styles.hintButton}
+                            onClick={() => {
+                                const randomKey = CONCEPT_IMAGES[Math.floor(Math.random() * CONCEPT_IMAGES.length)];
+                                setConceptImageKey(randomKey);
+                                setShowConceptModal(true);
+                            }}
+                        >
+                            {'💡 ポイント解説を見る'}
+                        </button>
+                    )}
+                    {hasHint && (
+                        <button
+                            className={styles.hintModalButton}
+                            onClick={() => setShowHintModal(true)}
+                        >
+                            {'🔍 ヒントを見る'}
+                        </button>
+                    )}
+                    {isLastStep && (
+                        <button
+                            className={styles.checkButton}
+                            onClick={handleCheck}
+                        >
+                            {'チェックしよう'}
+                        </button>
+                    )}
+                </div>
+                <div className={styles.navArea}>
                     <button
-                        className={styles.hintButton}
-                        onClick={() => {
-                            const randomKey = CONCEPT_IMAGES[Math.floor(Math.random() * CONCEPT_IMAGES.length)];
-                            setConceptImageKey(randomKey);
-                            setShowConceptModal(true);
-                        }}
+                        className={styles.prevButton}
+                        disabled={currentStep === 0}
+                        onClick={handlePrev}
                     >
-                        {'💡 ポイント解説を見る'}
+                        {'← 前へ'}
                     </button>
-                )}
-                {hasHint && (
                     <button
-                        className={styles.hintModalButton}
-                        onClick={() => setShowHintModal(true)}
+                        className={styles.nextButton}
+                        disabled={isLastStep}
+                        onClick={handleNext}
                     >
-                        {'🔍 ヒントを見る'}
+                        {'次へ →'}
                     </button>
-                )}
-                {isLastStep && (
-                    <button
-                        className={styles.checkButton}
-                        onClick={handleCheck}
-                    >
-                        {'チェックしよう'}
-                    </button>
-                )}
-            </div>
-
-            <div className={styles.navArea}>
-                <button
-                    className={styles.prevButton}
-                    disabled={currentStep === 0}
-                    onClick={handlePrev}
-                >
-                    {'← 前へ'}
-                </button>
-                <button
-                    className={styles.nextButton}
-                    disabled={isLastStep}
-                    onClick={handleNext}
-                >
-                    {'次へ →'}
-                </button>
+                </div>
             </div>
 
             {showHintModal && (
