@@ -27,8 +27,4 @@ npm-*
 # for act
 .secrets
 
-# 教材コンテンツ（非公開）
-public/projects/
-public/hints/
-src/scenarios/
-src/assets/navigator/
+
