@@ -434,12 +434,9 @@ class MenuBar extends React.Component {
                             <img
                                 id="logo_img"
                                 alt="Scratch"
-                                className={classNames(styles.scratchLogo, {
-                                    [styles.clickable]: typeof this.props.onClickLogo !== 'undefined'
-                                })}
+                                className={styles.scratchLogo}
                                 draggable={false}
                                 src={this.props.logo}
-                                onClick={this.props.onClickLogo}
                             />
                         </div>
                         {(this.props.canChangeTheme || this.props.canChangeLanguage) && (<SettingsMenu
@@ -697,9 +694,8 @@ class MenuBar extends React.Component {
                         <div
                             aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
                             className={
-                                classNames(styles.menuBarItem, styles.noOffset, styles.hoverable, 'tutorials-button')
+                                classNames(styles.menuBarItem, styles.noOffset, styles.disabled, 'tutorials-button')
                             }
-                            onClick={this.props.onOpenTipLibrary}
                         >
                             <img
                                 className={styles.helpIcon}
