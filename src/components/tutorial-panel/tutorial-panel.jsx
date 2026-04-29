@@ -37,7 +37,7 @@ const CATEGORY_STYLES = {
     調べる: {color: '#5CB1D6', fontWeight: 'bold'},
     演算: {color: '#59C059', fontWeight: 'bold'},
     変数: {color: '#FF8C1A', fontWeight: 'bold'},
-    ブロック定義: {color: '#FF6680', fontWeight: 'bold'},
+    ブロック定義: {color: '#FF6680', fontWeight: 'bold'}
 };
 
 const CATEGORY_KEYS = Object.keys(CATEGORY_STYLES).sort((a, b) => b.length - a.length);
@@ -80,14 +80,20 @@ const formatBody = (text, keyPrefix) => {
                 if (CATEGORY_STYLES[inner]) {
                     // カテゴリ名が「」で囲まれている場合は色付き太字
                     elements.push(
-                        <strong key={key} style={CATEGORY_STYLES[inner]}>{token.value}</strong>
+                        <strong
+                            key={key}
+                            style={CATEGORY_STYLES[inner]}
+                        >{token.value}</strong>
                     );
                 } else {
                     elements.push(<strong key={key}>{token.value}</strong>);
                 }
             } else if (token.type === 'category') {
                 elements.push(
-                    <span key={key} style={CATEGORY_STYLES[token.value]}>{token.value}</span>
+                    <span
+                        key={key}
+                        style={CATEGORY_STYLES[token.value]}
+                    >{token.value}</span>
                 );
             } else if (token.type === 'punct') {
                 elements.push(<span key={key}>{token.value}</span>);
@@ -145,6 +151,10 @@ const TutorialPanel = ({scenario, vm}) => {
         setShowHintModal(false);
     };
 
+    const handleOpenHintModal = () => setShowHintModal(true);
+    const handleCloseHintModal = () => setShowHintModal(false);
+    const handleOpenRoadmap = () => setShowRoadmapModal(true);
+
     if (result) {
         const resultData = result === 'success' ? success : failure;
         const navigatorKey = result === 'success' ? 'asuka_joy' : 'asuka_sad';
@@ -160,10 +170,12 @@ const TutorialPanel = ({scenario, vm}) => {
                         />
                     </div>
                 </div>
-                <div className={classNames(
-                    styles.descriptionArea,
-                    result === 'success' ? styles.successArea : styles.failureArea
-                )}>
+                <div
+                    className={classNames(
+                        styles.descriptionArea,
+                        result === 'success' ? styles.successArea : styles.failureArea
+                    )}
+                >
                     {resultData.message.split('\n').map((line, i) => (
                         <span key={i}>{line}<br /></span>
                     ))}
@@ -173,14 +185,14 @@ const TutorialPanel = ({scenario, vm}) => {
                         {result === 'failure' && (step.hintImage || step.hintNote) && (
                             <button
                                 className={styles.hintModalButton}
-                                onClick={() => setShowHintModal(true)}
+                                onClick={handleOpenHintModal}
                             >
                                 {'💡 ヒントを見てみるのです！'}
                             </button>
                         )}
                         <button
                             className={styles.checkButton}
-                            onClick={result === 'success' ? () => setShowRoadmapModal(true) : handleRetry}
+                            onClick={result === 'success' ? handleOpenRoadmap : handleRetry}
                         >
                             {result === 'success' ? '次のレッスンへ' : 'やり直す'}
                         </button>
@@ -191,7 +203,7 @@ const TutorialPanel = ({scenario, vm}) => {
                         title={'💡 ヒント！'}
                         hintImage={step.hintImage}
                         hintNote={step.hintNote}
-                        onClose={() => setShowHintModal(false)}
+                        onClose={handleCloseHintModal}
                     />
                 )}
                 {showRoadmapModal && (
@@ -238,7 +250,7 @@ const TutorialPanel = ({scenario, vm}) => {
                     {hasHint && (
                         <button
                             className={styles.hintModalButton}
-                            onClick={() => setShowHintModal(true)}
+                            onClick={handleOpenHintModal}
                         >
                             {'🔍 ヒントを見る'}
                         </button>
@@ -275,7 +287,7 @@ const TutorialPanel = ({scenario, vm}) => {
                     title={'💡 ヒント！'}
                     hintImage={step.hintImage}
                     hintNote={step.hintNote}
-                    onClose={() => setShowHintModal(false)}
+                    onClose={handleCloseHintModal}
                 />
             )}
             {showConceptModal && step.concept && (
@@ -299,6 +311,7 @@ TutorialPanel.propTypes = {
             navigatorImage: PropTypes.string.isRequired,
             title: PropTypes.string.isRequired,
             body: PropTypes.string.isRequired,
+            targetName: PropTypes.string,
             concept: PropTypes.string,
             conceptImage: PropTypes.string,
             hintImage: PropTypes.string,

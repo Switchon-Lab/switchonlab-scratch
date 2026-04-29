@@ -40,8 +40,8 @@ const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
                         const isDone = lesson.no < currentLessonNo;
                         const isCurrent = lesson.no === currentLessonNo;
                         const cardClass = isDone ? styles.cardDone :
-                                isCurrent ? styles.cardCurrent :
-                                styles.cardTodo;
+                            isCurrent ? styles.cardCurrent :
+                            styles.cardTodo;
                         return (
                             <React.Fragment key={lesson.no}>
                                 <div className={cardClass}>
