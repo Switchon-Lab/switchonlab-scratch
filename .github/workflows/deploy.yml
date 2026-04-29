@@ -1,0 +1,59 @@
+name: Deploy to Vercel
+
+on:
+    push:
+        branches: [develop]
+    workflow_dispatch:
+
+concurrency:
+    group: "${{ github.workflow }} @ ${{ github.ref }}"
+    cancel-in-progress: true
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        env:
+            NODE_OPTIONS: --max-old-space-size=4000
+            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        steps:
+            - name: Checkout switchonlab-scratch
+              uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+            - name: Checkout switchonlab-content
+              uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+              with:
+                  # リポジトリ名は実際のものに合わせて変更してください
+                  repository: switchonlab/switchonlab-content
+                  token: ${{ secrets.CONTENT_REPO_TOKEN }}
+                  path: _content
+
+            - name: Copy content files into scratch
+              run: |
+                  mkdir -p src/assets/navigator src/assets/scenarios public/projects public/hints
+                  cp -r _content/src/assets/navigator/. src/assets/navigator/
+                  cp -r _content/src/assets/scenarios/. src/assets/scenarios/
+                  cp -r _content/public/projects/. public/projects/
+                  cp -r _content/public/hints/. public/hints/
+
+            - uses: actions/setup-node@26961cf329f22f6837d5f54c3efd76b480300ace # v4
+              with:
+                  cache: "npm"
+                  node-version-file: ".nvmrc"
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: Install Vercel CLI
+              run: npm install --global vercel@latest
+
+            - name: Pull Vercel Environment
+              run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+            - name: Build
+              run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+              env:
+                  NODE_ENV: production
+
+            - name: Deploy to Vercel
+              run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
