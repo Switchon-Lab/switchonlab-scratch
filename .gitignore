@@ -28,3 +28,8 @@ npm-*
 .secrets
 
 
+# 教材コンテンツ（非公開・switchonlab-contentで管理）
+src/assets/navigator/
+src/assets/scenarios/
+public/projects/
+public/hints/
