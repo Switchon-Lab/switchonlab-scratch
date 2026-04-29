@@ -3,12 +3,20 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import styles from './hint-modal.css';
 
-const HintModal = ({title, hintImage, hintNote, navigatorImage, conceptText, headerColor, onClose}) => ReactDOM.createPortal(
+const HintModal = ({
+    title,
+    hintImage,
+    hintNote,
+    navigatorImage,
+    conceptText,
+    headerColor,
+    onClose
+}) => ReactDOM.createPortal(
     <div className={styles.overlay}>
         <div className={styles.modal}>
             <div
                 className={styles.header}
-                style={headerColor ? {backgroundColor: headerColor} : undefined}
+                style={headerColor ? {backgroundColor: headerColor} : null}
             >
                 <span>{title}</span>
                 <button

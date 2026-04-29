@@ -74,7 +74,7 @@ const MenuItem = ({
             className,
             {[styles.expanded]: expanded}
         )}
-        onClick={disabled ? undefined : onClick}
+        onClick={disabled ? null : onClick}
     >
         {children}
     </li>

@@ -11,8 +11,10 @@ const LESSONS = [
     {no: 5, label: 'L5', title: '効果音を\nつけよう'},
     {no: 6, label: 'L6', title: 'タイトルを\n作ろう'},
     {no: 7, label: 'L7', title: 'ゲームオーバー\nを作ろう'},
-    {no: 8, label: 'L8', title: '仕上げを\nしよう'},
+    {no: 8, label: 'L8', title: '仕上げを\nしよう'}
 ];
+
+const handleStopPropagation = e => e.stopPropagation();
 
 const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
     <div
@@ -21,7 +23,7 @@ const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
     >
         <div
             className={styles.modal}
-            onClick={e => e.stopPropagation()}
+            onClick={handleStopPropagation}
         >
             <div className={styles.header}>
                 <span>{`🎉 L${currentLessonNo} クリア！`}</span>
@@ -38,8 +40,8 @@ const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
                         const isDone = lesson.no < currentLessonNo;
                         const isCurrent = lesson.no === currentLessonNo;
                         const cardClass = isDone ? styles.cardDone :
-                            isCurrent ? styles.cardCurrent :
-                            styles.cardTodo;
+                                isCurrent ? styles.cardCurrent :
+                                styles.cardTodo;
                         return (
                             <React.Fragment key={lesson.no}>
                                 <div className={cardClass}>
@@ -77,7 +79,7 @@ const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
 
 RoadmapModal.propTypes = {
     currentLessonNo: PropTypes.number.isRequired,
-    onClose: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired
 };
 
 export default RoadmapModal;

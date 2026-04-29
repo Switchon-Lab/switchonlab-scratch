@@ -29,15 +29,15 @@ const getImage = key => NAVIGATOR_IMAGES[key] || asukaDefault;
 
 // Scratchカテゴリ名と対応する色
 const CATEGORY_STYLES = {
-    '動き':       {color: '#4C97FF', fontWeight: 'bold'},
-    '見た目':     {color: '#9966FF', fontWeight: 'bold'},
-    '音':         {color: '#CF63CF', fontWeight: 'bold'},
-    'イベント':   {color: '#B8860B', fontWeight: 'bold'},
-    '制御':       {color: '#FF8C1A', fontWeight: 'bold'},
-    '調べる':     {color: '#5CB1D6', fontWeight: 'bold'},
-    '演算':       {color: '#59C059', fontWeight: 'bold'},
-    '変数':       {color: '#FF8C1A', fontWeight: 'bold'},
-    'ブロック定義': {color: '#FF6680', fontWeight: 'bold'},
+    動き: {color: '#4C97FF', fontWeight: 'bold'},
+    見た目: {color: '#9966FF', fontWeight: 'bold'},
+    音: {color: '#CF63CF', fontWeight: 'bold'},
+    イベント: {color: '#B8860B', fontWeight: 'bold'},
+    制御: {color: '#FF8C1A', fontWeight: 'bold'},
+    調べる: {color: '#5CB1D6', fontWeight: 'bold'},
+    演算: {color: '#59C059', fontWeight: 'bold'},
+    変数: {color: '#FF8C1A', fontWeight: 'bold'},
+    ブロック定義: {color: '#FF6680', fontWeight: 'bold'},
 };
 
 const CATEGORY_KEYS = Object.keys(CATEGORY_STYLES).sort((a, b) => b.length - a.length);
