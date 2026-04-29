@@ -154,6 +154,13 @@ const TutorialPanel = ({scenario, vm}) => {
     const handleOpenHintModal = () => setShowHintModal(true);
     const handleCloseHintModal = () => setShowHintModal(false);
     const handleOpenRoadmap = () => setShowRoadmapModal(true);
+    const handleCloseRoadmap = () => setShowRoadmapModal(false);
+    const handleOpenConceptModal = () => {
+        const randomKey = CONCEPT_IMAGES[Math.floor(Math.random() * CONCEPT_IMAGES.length)];
+        setConceptImageKey(randomKey);
+        setShowConceptModal(true);
+    };
+    const handleCloseConceptModal = () => setShowConceptModal(false);
 
     if (result) {
         const resultData = result === 'success' ? success : failure;
@@ -209,7 +216,7 @@ const TutorialPanel = ({scenario, vm}) => {
                 {showRoadmapModal && (
                     <RoadmapModal
                         currentLessonNo={lessonNo}
-                        onClose={() => setShowRoadmapModal(false)}
+                        onClose={handleCloseRoadmap}
                     />
                 )}
             </div>
@@ -238,11 +245,7 @@ const TutorialPanel = ({scenario, vm}) => {
                     {step.concept && (
                         <button
                             className={styles.hintButton}
-                            onClick={() => {
-                                const randomKey = CONCEPT_IMAGES[Math.floor(Math.random() * CONCEPT_IMAGES.length)];
-                                setConceptImageKey(randomKey);
-                                setShowConceptModal(true);
-                            }}
+                            onClick={handleOpenConceptModal}
                         >
                             {'💡 ポイント解説を見る'}
                         </button>
@@ -296,7 +299,7 @@ const TutorialPanel = ({scenario, vm}) => {
                     headerColor={'#2E7D32'}
                     navigatorImage={getImage(conceptImageKey)}
                     conceptText={step.concept}
-                    onClose={() => setShowConceptModal(false)}
+                    onClose={handleCloseConceptModal}
                 />
             )}
         </div>
