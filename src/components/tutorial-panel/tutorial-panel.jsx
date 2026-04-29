@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import VM from 'scratch-vm';
@@ -126,41 +126,41 @@ const TutorialPanel = ({scenario, vm}) => {
     const panelTitle = id ? `${id}: ${title}` : title;
     const lessonNo = id ? parseInt(id.replace(/\D/g, ''), 10) : 0;
 
-    const handlePrev = () => {
+    const handlePrev = useCallback(() => {
         setCurrentStep(i => i - 1);
         setShowConceptModal(false);
         setShowHintModal(false);
-    };
+    }, []);
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         setCurrentStep(i => i + 1);
         setShowConceptModal(false);
         setShowHintModal(false);
-    };
+    }, []);
 
-    const handleCheck = () => {
+    const handleCheck = useCallback(() => {
         const passed = checkConditions(vm, step.conditions, step.targetName);
         setResult(passed ? 'success' : 'failure');
         setShowConceptModal(false);
         setShowHintModal(false);
-    };
+    }, [vm, step]);
 
-    const handleRetry = () => {
+    const handleRetry = useCallback(() => {
         setResult(null);
         setShowConceptModal(false);
         setShowHintModal(false);
-    };
+    }, []);
 
-    const handleOpenHintModal = () => setShowHintModal(true);
-    const handleCloseHintModal = () => setShowHintModal(false);
-    const handleOpenRoadmap = () => setShowRoadmapModal(true);
-    const handleCloseRoadmap = () => setShowRoadmapModal(false);
-    const handleOpenConceptModal = () => {
+    const handleOpenHintModal = useCallback(() => setShowHintModal(true), []);
+    const handleCloseHintModal = useCallback(() => setShowHintModal(false), []);
+    const handleOpenRoadmap = useCallback(() => setShowRoadmapModal(true), []);
+    const handleCloseRoadmap = useCallback(() => setShowRoadmapModal(false), []);
+    const handleOpenConceptModal = useCallback(() => {
         const randomKey = CONCEPT_IMAGES[Math.floor(Math.random() * CONCEPT_IMAGES.length)];
         setConceptImageKey(randomKey);
         setShowConceptModal(true);
-    };
-    const handleCloseConceptModal = () => setShowConceptModal(false);
+    }, []);
+    const handleCloseConceptModal = useCallback(() => setShowConceptModal(false), []);
 
     if (result) {
         const resultData = result === 'success' ? success : failure;

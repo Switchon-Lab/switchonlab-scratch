@@ -4,7 +4,12 @@
       "Bash(npm --version)",
       "Bash(nvm version *)",
       "Bash(npm list *)",
-      "PowerShell(npm list -g --depth=0)"
+      "PowerShell(npm list -g --depth=0)",
+      "Bash(npx eslint *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('eslintConfig','none'\\), indent=2\\)\\)\")",
+      "Bash(node -e \"const r=require\\('eslint-config-scratch'\\); console.log\\(JSON.stringify\\(r.rules && r.rules['react/jsx-no-bind'], null, 2\\)\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); r=d.get\\('rules',{}\\); print\\('jsx-no-bind:', json.dumps\\(r.get\\('react/jsx-no-bind','not found'\\)\\)\\)\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\a160c\\Documents\\ClaudeCode\\switchonlab-scratch\\src\\components"
