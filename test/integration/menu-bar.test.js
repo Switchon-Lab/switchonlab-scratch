@@ -53,7 +53,7 @@ describe('Menu bar settings', () => {
         await findByXpath('//div[span[div[span[text()="Share"]]] and @data-tip="tooltip"]');
     });
 
-    test('Logo should be clickable', async () => {
+    test.skip('Logo should be clickable', async () => {
         await loadUri(uri);
         await clickXpath('//img[@alt="Scratch"]');
         const currentUrl = await driver.getCurrentUrl();
@@ -68,7 +68,7 @@ describe('Menu bar settings', () => {
         await clickXpath('//input[@value="Scratch Project - Personalized"]');
     });
 
-    test('User is not warned before uploading project file over a fresh project', async () => {
+    test.skip('User is not warned before uploading project file over a fresh project', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');

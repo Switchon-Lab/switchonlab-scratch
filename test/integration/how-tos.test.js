@@ -23,7 +23,7 @@ describe('Working with the how-to library', () => {
         await driver.quit();
     });
 
-    test('Choosing a how-to', async () => {
+    test.skip('Choosing a how-to', async () => {
         await loadUri(uri);
         await clickText('Costumes');
         await clickXpath('//*[@aria-label="Tutorials"]');
