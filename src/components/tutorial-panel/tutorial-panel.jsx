@@ -8,13 +8,13 @@ import RoadmapModal from '../roadmap-modal/roadmap-modal.jsx';
 import checkConditions from '../../lib/check-conditions.js';
 
 const NAVIGATOR_IMAGES = {
-    asuka_default: '../../assets/navigator/asuka_default.png',
-    asuka_smile1: '../../assets/navigator/asuka_smile1.png',
-    asuka_smile2: '../../assets/navigator/asuka_smile2.png',
-    asuka_joy: '../../assets/navigator/asuka_joy.png',
-    asuka_sad: '../../assets/navigator/asuka_sad.png',
-    asuka_angry: '../../assets/navigator/asuka_angry.png',
-    asuka_surprise: '../../assets/navigator/asuka_surprise.png'
+    asuka_default: '/navigator/asuka_default.png',
+    asuka_smile1: '/navigator/asuka_smile1.png',
+    asuka_smile2: '/navigator/asuka_smile2.png',
+    asuka_joy: '/navigator/asuka_joy.png',
+    asuka_sad: '/navigator/asuka_sad.png',
+    asuka_angry: '/navigator/asuka_angry.png',
+    asuka_surprise: '/navigator/asuka_surprise.png'
 };
 
 const getImage = key => NAVIGATOR_IMAGES[key] || NAVIGATOR_IMAGES.asuka_default;

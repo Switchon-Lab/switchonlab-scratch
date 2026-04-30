@@ -30,8 +30,8 @@ jobs:
 
             - name: Copy content files into scratch
               run: |
-                  mkdir -p src/assets/navigator src/assets/scenarios public/projects public/hints
-                  cp -r _content/navigator/. src/assets/navigator/
+                  mkdir -p public/navigator src/assets/scenarios public/projects public/hints
+                  cp -r _content/navigator/. public/navigator/
                   cp -r _content/scenarios/. src/assets/scenarios/
                   cp -r _content/projects/. public/projects/
                   cp -r _content/hints/. public/hints/
