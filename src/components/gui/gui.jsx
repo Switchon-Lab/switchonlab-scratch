@@ -262,9 +262,9 @@ const GUIComponent = props => {
                     <Box className={styles.flexWrapper}>
                         <TutorialPanel
                             scenario={
-                                typeof (scenarioMap.default || scenarioMap) === 'function'
-                                    ? (scenarioMap.default || scenarioMap)()
-                                    : null
+                                typeof (scenarioMap.default || scenarioMap) === 'function' ?
+                                    (scenarioMap.default || scenarioMap)() :
+                                    null
                             }
                             vm={vm}
                         />
