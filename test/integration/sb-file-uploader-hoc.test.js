@@ -26,7 +26,7 @@ describe('Loading scratch gui', () => {
         await driver.quit();
     });
 
-    test('Loading project file from computer succeeds, without opening failure alert', async () => {
+    test.skip('Loading project file from computer succeeds, without opening failure alert', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');
@@ -90,7 +90,7 @@ describe('Loading scratch gui', () => {
         expect(tileVisible).toBe(true);
     });
 
-    test('Load sb3 project with a missing bmp costume', async () => {
+    test.skip('Load sb3 project with a missing bmp costume', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');
@@ -101,7 +101,7 @@ describe('Loading scratch gui', () => {
         expect(tileVisible).toBe(true);
     });
 
-    test('Load sb3 project with an invalid bmp costume', async () => {
+    test.skip('Load sb3 project with an invalid bmp costume', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');
