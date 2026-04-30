@@ -7,27 +7,17 @@ import HintModal from '../hint-modal/hint-modal.jsx';
 import RoadmapModal from '../roadmap-modal/roadmap-modal.jsx';
 import checkConditions from '../../lib/check-conditions.js';
 
-/* eslint-disable import/no-unresolved */
-import asukaDefault from '../../assets/navigator/asuka_default.png';
-import asukaSmile1 from '../../assets/navigator/asuka_smile1.png';
-import asukaSmile2 from '../../assets/navigator/asuka_smile2.png';
-import asukaJoy from '../../assets/navigator/asuka_joy.png';
-import asukaSad from '../../assets/navigator/asuka_sad.png';
-import asukaAngry from '../../assets/navigator/asuka_angry.png';
-import asukaSurprise from '../../assets/navigator/asuka_surprise.png';
-/* eslint-enable import/no-unresolved */
-
 const NAVIGATOR_IMAGES = {
-    asuka_default: asukaDefault,
-    asuka_smile1: asukaSmile1,
-    asuka_smile2: asukaSmile2,
-    asuka_joy: asukaJoy,
-    asuka_sad: asukaSad,
-    asuka_angry: asukaAngry,
-    asuka_surprise: asukaSurprise
+    asuka_default: '../../assets/navigator/asuka_default.png',
+    asuka_smile1: '../../assets/navigator/asuka_smile1.png',
+    asuka_smile2: '../../assets/navigator/asuka_smile2.png',
+    asuka_joy: '../../assets/navigator/asuka_joy.png',
+    asuka_sad: '../../assets/navigator/asuka_sad.png',
+    asuka_angry: '../../assets/navigator/asuka_angry.png',
+    asuka_surprise: '../../assets/navigator/asuka_surprise.png'
 };
 
-const getImage = key => NAVIGATOR_IMAGES[key] || asukaDefault;
+const getImage = key => NAVIGATOR_IMAGES[key] || NAVIGATOR_IMAGES.asuka_default;
 
 // Scratchカテゴリ名と対応する色
 const CATEGORY_STYLES = {
