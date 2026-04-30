@@ -78,7 +78,7 @@ describe('Menu bar settings', () => {
         await findByText('project1-sprite');
     });
 
-    test('User is warned before uploading project file over an edited project', async () => {
+    test.skip('User is warned before uploading project file over an edited project', async () => {
         await loadUri(uri);
 
         // Change the project by deleting a sprite

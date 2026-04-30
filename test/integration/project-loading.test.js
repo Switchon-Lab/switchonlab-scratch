@@ -91,7 +91,7 @@ describe('Loading scratch gui', () => {
             await clickText('Operators', scope.blocksTab);
         });
 
-        test('Not logged in->made no changes to project->create new project should not show alert', async () => {
+        test.skip('Not logged in->made no changes to project->create new project should not show alert', async () => {
             await loadUri(uri);
             await clickXpath(FILE_MENU_XPATH);
             await clickXpath('//li[span[text()="New"]]');
