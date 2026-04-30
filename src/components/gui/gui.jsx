@@ -261,7 +261,11 @@ const GUIComponent = props => {
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
                         <TutorialPanel
-                            scenario={typeof (scenarioMap.default || scenarioMap) === 'function' ? (scenarioMap.default || scenarioMap)() : null}
+                            scenario={
+                                typeof (scenarioMap.default || scenarioMap) === 'function'
+                                    ? (scenarioMap.default || scenarioMap)()
+                                    : null
+                            }
                             vm={vm}
                         />
                         <Box className={styles.editorWrapper}>
