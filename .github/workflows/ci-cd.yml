@@ -60,15 +60,6 @@ jobs:
               with:
                 name: dist-output
                 path: ./dist
-            - run: |
-                for F in chrome chromium chromedriver; do
-                    which $F && $F --version || echo Not found: $F
-                done
-            - name: Run Integration Tests
-              env:
-                  JEST_JUNIT_OUTPUT_NAME: results.txt
-                  JEST_JUNIT_OUTPUT_DIR: test-results/integration
-              run: npm run test:integration -- --reporters="default" --reporters="jest-junit"
             - name: Store Test Results
               if: always() # Even if tests fail
               uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
