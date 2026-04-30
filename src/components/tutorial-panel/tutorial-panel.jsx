@@ -7,6 +7,7 @@ import HintModal from '../hint-modal/hint-modal.jsx';
 import RoadmapModal from '../roadmap-modal/roadmap-modal.jsx';
 import checkConditions from '../../lib/check-conditions.js';
 
+/* eslint-disable import/no-unresolved */
 import asukaDefault from '../../assets/navigator/asuka_default.png';
 import asukaSmile1 from '../../assets/navigator/asuka_smile1.png';
 import asukaSmile2 from '../../assets/navigator/asuka_smile2.png';
@@ -14,6 +15,7 @@ import asukaJoy from '../../assets/navigator/asuka_joy.png';
 import asukaSad from '../../assets/navigator/asuka_sad.png';
 import asukaAngry from '../../assets/navigator/asuka_angry.png';
 import asukaSurprise from '../../assets/navigator/asuka_surprise.png';
+/* eslint-enable import/no-unresolved */
 
 const NAVIGATOR_IMAGES = {
     asuka_default: asukaDefault,

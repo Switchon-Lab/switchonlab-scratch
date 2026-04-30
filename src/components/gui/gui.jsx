@@ -42,6 +42,7 @@ import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
 import DebugModal from '../debug-modal/debug-modal.jsx';
 import TutorialPanel from '../tutorial-panel/tutorial-panel.jsx';
+// eslint-disable-next-line import/no-unresolved
 import getScenario from '../../assets/scenarios/scenario-map.js';
 
 const messages = defineMessages({
