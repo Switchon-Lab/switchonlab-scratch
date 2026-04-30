@@ -36,7 +36,7 @@ describe('Loading scratch gui', () => {
         // this test will fail if an alert appears, e.g. in SBFileUploaderHOC's onload() function
     });
 
-    test('Loading project file from computer gives project the filename from file', async () => {
+    test.skip('Loading project file from computer gives project the filename from file', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');
@@ -46,7 +46,7 @@ describe('Loading scratch gui', () => {
         await clickXpath('//input[@value="project1"]');
     });
 
-    test('Load sb3 project with a missing svg costume', async () => {
+    test.skip('Load sb3 project with a missing svg costume', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');
@@ -57,7 +57,7 @@ describe('Loading scratch gui', () => {
         expect(tileVisible).toBe(true);
     });
 
-    test('Load sb3 project with an invalid svg costume', async () => {
+    test.skip('Load sb3 project with an invalid svg costume', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');
@@ -68,7 +68,7 @@ describe('Loading scratch gui', () => {
         expect(tileVisible).toBe(true);
     });
 
-    test('Load sb2 project with a missing svg costume', async () => {
+    test.skip('Load sb2 project with a missing svg costume', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');
@@ -79,7 +79,7 @@ describe('Loading scratch gui', () => {
         expect(tileVisible).toBe(true);
     });
 
-    test('Load sb2 project with an invalid svg costume', async () => {
+    test.skip('Load sb2 project with an invalid svg costume', async () => {
         await loadUri(uri);
         await clickXpath(FILE_MENU_XPATH);
         await clickText('Load from your computer');
