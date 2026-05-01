@@ -303,6 +303,7 @@ TutorialPanel.propTypes = {
     scenario: PropTypes.shape({
         id: PropTypes.string,
         title: PropTypes.string.isRequired,
+        lessons: PropTypes.array,
         steps: PropTypes.arrayOf(PropTypes.shape({
             navigatorImage: PropTypes.string.isRequired,
             title: PropTypes.string.isRequired,
