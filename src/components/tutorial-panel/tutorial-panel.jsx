@@ -110,7 +110,7 @@ const TutorialPanel = ({scenario, vm}) => {
     const [showRoadmapModal, setShowRoadmapModal] = useState(false);
     const [conceptImageKey, setConceptImageKey] = useState('asuka_surprise');
 
-    const {steps, success, failure, title, id} = scenario;
+    const {steps, success, failure, title, id, lessons} = scenario;
     const totalSteps = steps.length;
     const isLastStep = currentStep === totalSteps - 1;
     const step = steps[currentStep];
@@ -207,6 +207,7 @@ const TutorialPanel = ({scenario, vm}) => {
                 )}
                 {showRoadmapModal && (
                     <RoadmapModal
+                        lessons={lessons || []}
                         currentLessonNo={lessonNo}
                         onClose={handleCloseRoadmap}
                     />

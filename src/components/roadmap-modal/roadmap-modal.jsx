@@ -3,20 +3,9 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import styles from './roadmap-modal.css';
 
-const LESSONS = [
-    {no: 1, label: 'L1', title: 'りんごを\n表示しよう'},
-    {no: 2, label: 'L2', title: 'りんごを\n落とそう'},
-    {no: 3, label: 'L3', title: 'カゴを\n動かそう'},
-    {no: 4, label: 'L4', title: 'スコアを\nつけよう'},
-    {no: 5, label: 'L5', title: '効果音を\nつけよう'},
-    {no: 6, label: 'L6', title: 'タイトルを\n作ろう'},
-    {no: 7, label: 'L7', title: 'ゲームオーバー\nを作ろう'},
-    {no: 8, label: 'L8', title: '仕上げを\nしよう'}
-];
-
 const handleStopPropagation = e => e.stopPropagation();
 
-const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
+const RoadmapModal = ({lessons, currentLessonNo, onClose}) => ReactDOM.createPortal(
     <div
         className={styles.overlay}
         onClick={onClose}
@@ -36,7 +25,7 @@ const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
             </div>
             <div className={styles.body}>
                 <div className={styles.roadmap}>
-                    {LESSONS.map((lesson, idx) => {
+                    {lessons.map((lesson, idx) => {
                         const isDone = lesson.no < currentLessonNo;
                         const isCurrent = lesson.no === currentLessonNo;
                         const cardClass = isDone ? styles.cardDone :
@@ -58,7 +47,7 @@ const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
                                         ))}
                                     </div>
                                 </div>
-                                {idx < LESSONS.length - 1 && (
+                                {idx < lessons.length - 1 && (
                                     <div className={styles.arrow}>{'→'}</div>
                                 )}
                             </React.Fragment>
@@ -78,6 +67,11 @@ const RoadmapModal = ({currentLessonNo, onClose}) => ReactDOM.createPortal(
 );
 
 RoadmapModal.propTypes = {
+    lessons: PropTypes.arrayOf(PropTypes.shape({
+        no: PropTypes.number.isRequired,
+        label: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired
+    })).isRequired,
     currentLessonNo: PropTypes.number.isRequired,
     onClose: PropTypes.func.isRequired
 };
