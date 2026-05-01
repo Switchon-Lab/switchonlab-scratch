@@ -90,10 +90,12 @@ const checkConditions = (vm, conditions, targetName) => {
                 );
             }
 
-            // ブロック系の条件：対象スプライトを特定
-            const target = targetName ?
-                vm.runtime.targets.find(t => !t.isStage && t.sprite.name === targetName) :
-                vm.runtime.targets.find(t => !t.isStage);
+            // ブロック系の条件：対象スプライトを特定（"Stage" 指定時はステージを対象にする）
+            const target = targetName === 'Stage' ?
+                vm.runtime.targets.find(t => t.isStage) :
+                targetName ?
+                    vm.runtime.targets.find(t => !t.isStage && t.sprite && t.sprite.name === targetName) :
+                    vm.runtime.targets.find(t => !t.isStage);
 
             if (!target) return false;
 
