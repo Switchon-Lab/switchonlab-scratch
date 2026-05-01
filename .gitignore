@@ -31,5 +31,6 @@ npm-*
 # 教材コンテンツ（非公開・switchonlab-contentで管理）
 src/assets/navigator/
 src/assets/scenarios/
+public/navigator/
 public/projects/
 public/hints/
