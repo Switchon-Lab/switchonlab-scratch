@@ -199,11 +199,14 @@ const checkConditions = (vm, conditions, targetName) => {
             }
 
             case 'hasNestedBlock': {
-            // parentOpcodeのSUBSTACKをたどってchildOpcodeのブロックを探す
+            // parentOpcodeのSUBSTACK（Cブロック）またはnext（ハットブロック）をたどってchildOpcodeを探す
                 const parentBlocks = blockList.filter(b => b.opcode === condition.parentOpcode);
                 return parentBlocks.some(parentBlock => {
-                    if (!parentBlock.inputs || !parentBlock.inputs.SUBSTACK) return false;
-                    let currentId = parentBlock.inputs.SUBSTACK.block;
+                    const startId = (parentBlock.inputs && parentBlock.inputs.SUBSTACK)
+                        ? parentBlock.inputs.SUBSTACK.block
+                        : parentBlock.next;
+                    if (!startId) return false;
+                    let currentId = startId;
                     while (currentId) {
                         const currentBlock = blocks[currentId];
                         if (!currentBlock) break;
@@ -215,7 +218,7 @@ const checkConditions = (vm, conditions, targetName) => {
             }
 
             case 'hasNestedBlockWithInput': {
-            // parentOpcodeのSUBSTACK内にchildOpcodeが存在し、かつそのfieldがvalueと一致するか
+            // parentOpcodeのSUBSTACK/next内にchildOpcodeが存在し、かつそのfieldがvalueと一致するか
                 const getInputNum = (block, fieldName) => {
                     if (!block.inputs) return null;
                     const input = block.inputs[fieldName];
@@ -229,8 +232,11 @@ const checkConditions = (vm, conditions, targetName) => {
                 };
                 const parentBlocks = blockList.filter(b => b.opcode === condition.parentOpcode);
                 return parentBlocks.some(parentBlock => {
-                    if (!parentBlock.inputs || !parentBlock.inputs.SUBSTACK) return false;
-                    let currentId = parentBlock.inputs.SUBSTACK.block;
+                    const startId = (parentBlock.inputs && parentBlock.inputs.SUBSTACK)
+                        ? parentBlock.inputs.SUBSTACK.block
+                        : parentBlock.next;
+                    if (!startId) return false;
+                    let currentId = startId;
                     while (currentId) {
                         const currentBlock = blocks[currentId];
                         if (!currentBlock) break;
