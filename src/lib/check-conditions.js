@@ -28,6 +28,11 @@
  *   hasBlockInInput  - parentOpcodeのブロックの指定inputKeyに childOpcode が直接接続されているか
  *                    parentOpcode: 親ブロックのopcode, inputKey: 入力名（例: 'CONDITION'）
  *                    childOpcode: 期待する子ブロックのopcode
+ *                    ※ input.blockのみ参照（shadowの残存による誤判定防止）
+ *   hasNestedBlockWithField - parentOpcodeのSUBSTACK/nextチェーン内にchildOpcodeが存在し、
+ *                    かつその直接フィールドがvalueと一致するか（切断ブロックは対象外）
+ *                    parentOpcode: 親ブロックのopcode, childOpcode: 子ブロックのopcode
+ *                    field: フィールド名（例: 'STOP_OPTION'）, value: 期待する文字列値
  *   inputValue     - 指定opcodeのブロックの入力値が一致するか
  *                    field: 入力名（例: 'X', 'Y', 'SIZE', 'DX', 'DY'）
  *                    value: 期待する数値
@@ -223,15 +228,41 @@ const checkConditions = (vm, conditions, targetName) => {
 
             case 'hasBlockInInput': {
             // parentOpcodeのブロックの指定inputKeyにchildOpcodeのブロックが直接接続されているか確認
+            // ※ shadowは使わずinput.blockのみ参照（shadowに古いブロックが残存しても誤判定しないため）
                 const parentBlocks = blockList.filter(b => b.opcode === condition.parentOpcode);
                 return parentBlocks.some(parent => {
                     if (!parent.inputs) return false;
                     const input = parent.inputs[condition.inputKey];
                     if (!input) return false;
-                    const childId = input.block || input.shadow;
+                    const childId = input.block;
                     if (!childId) return false;
                     const child = blocks[childId];
                     return !!(child && child.opcode === condition.childOpcode);
+                });
+            }
+
+            case 'hasNestedBlockWithField': {
+            // parentOpcodeのSUBSTACK/nextチェーン内にchildOpcodeが存在し、
+            // そのブロックの直接フィールドがvalueと一致するか（切断ブロックは対象外）
+                const parentBlocks = blockList.filter(b => b.opcode === condition.parentOpcode);
+                return parentBlocks.some(parentBlock => {
+                    const startId = (parentBlock.inputs && parentBlock.inputs.SUBSTACK) ?
+                        parentBlock.inputs.SUBSTACK.block :
+                        parentBlock.next;
+                    if (!startId) return false;
+                    let currentId = startId;
+                    while (currentId) {
+                        const currentBlock = blocks[currentId];
+                        if (!currentBlock) break;
+                        if (currentBlock.opcode === condition.childOpcode) {
+                            const directField = currentBlock.fields && currentBlock.fields[condition.field];
+                            if (directField !== null && directField !== void 0) {
+                                if (String(directField.value) === String(condition.value)) return true;
+                            }
+                        }
+                        currentId = currentBlock.next;
+                    }
+                    return false;
                 });
             }
 
