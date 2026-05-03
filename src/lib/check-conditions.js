@@ -157,7 +157,7 @@ const checkConditions = (vm, conditions, targetName) => {
                     if (!block.inputs) return false;
                     const input = block.inputs[condition.field];
                     if (!input) return false;
-                    const menuId = input.block || input.shadow;
+                    const menuId = input.shadow || input.block;
                     if (!menuId) return false;
                     const menuBlock = blocks[menuId];
                     if (!menuBlock || !menuBlock.fields) return false;
@@ -224,7 +224,8 @@ const checkConditions = (vm, conditions, targetName) => {
                     if (!block.inputs) return null;
                     const input = block.inputs[fieldName];
                     if (!input) return null;
-                    const valueBlockId = input.block || input.shadow;
+                    // shadow を優先: input.block は古いブロックを指す場合があるため
+                    const valueBlockId = input.shadow || input.block;
                     if (!valueBlockId) return null;
                     const valueBlock = blocks[valueBlockId];
                     if (!valueBlock || !valueBlock.fields) return null;
@@ -260,7 +261,7 @@ const checkConditions = (vm, conditions, targetName) => {
                     const input = block.inputs[condition.field];
                     if (!input) return false;
 
-                    const valueBlockId = input.block || input.shadow;
+                    const valueBlockId = input.shadow || input.block;
                     if (!valueBlockId) return false;
 
                     const valueBlock = blocks[valueBlockId];
@@ -282,7 +283,7 @@ const checkConditions = (vm, conditions, targetName) => {
                     const getInputValue = inputName => {
                         const input = block.inputs[inputName];
                         if (!input) return null;
-                        const valueBlockId = input.block || input.shadow;
+                        const valueBlockId = input.shadow || input.block;
                         if (!valueBlockId) return null;
                         const valueBlock = blocks[valueBlockId];
                         if (!valueBlock || !valueBlock.fields) return null;
@@ -311,7 +312,7 @@ const checkConditions = (vm, conditions, targetName) => {
                     if (!block.inputs) return false;
                     const input = block.inputs[condition.field];
                     if (!input) return false;
-                    const valueBlockId = input.block || input.shadow;
+                    const valueBlockId = input.shadow || input.block;
                     if (!valueBlockId) return false;
                     const valueBlock = blocks[valueBlockId];
                     if (!valueBlock || !valueBlock.fields) return false;
@@ -383,7 +384,7 @@ const checkConditions = (vm, conditions, targetName) => {
                     const getInputNum = inputName => {
                         const input = xBlock.inputs[inputName];
                         if (!input) return null;
-                        const valueBlockId = input.block || input.shadow;
+                        const valueBlockId = input.shadow || input.block;
                         if (!valueBlockId) return null;
                         const valueBlock = blocks[valueBlockId];
                         if (!valueBlock || !valueBlock.fields) return null;
@@ -435,7 +436,7 @@ const checkConditions = (vm, conditions, targetName) => {
                         if (currentBlock.opcode === condition.opcode && currentBlock.inputs) {
                             const input = currentBlock.inputs[condition.field];
                             if (input) {
-                                const valueBlockId = input.block || input.shadow;
+                                const valueBlockId = input.shadow || input.block;
                                 if (valueBlockId) {
                                     const valueBlock = blocks[valueBlockId];
                                     if (valueBlock && valueBlock.fields) {
@@ -490,7 +491,7 @@ const checkConditions = (vm, conditions, targetName) => {
                         // field が指定されている場合は入力ブロック経由で数値比較
                         const input = currentBlock.inputs && currentBlock.inputs[condition.field];
                         if (input) {
-                            const valueBlockId = input.block || input.shadow;
+                            const valueBlockId = input.shadow || input.block;
                             if (valueBlockId) {
                                 const valueBlock = blocks[valueBlockId];
                                 if (valueBlock && valueBlock.fields) {
@@ -517,7 +518,7 @@ const checkConditions = (vm, conditions, targetName) => {
                     if (!parentBlock.inputs) return null;
                     const input = parentBlock.inputs[inputName];
                     if (!input) return null;
-                    const valueBlockId = input.block || input.shadow;
+                    const valueBlockId = input.shadow || input.block;
                     if (!valueBlockId) return null;
                     const valueBlock = blocks[valueBlockId];
                     if (!valueBlock || !valueBlock.fields) return null;
