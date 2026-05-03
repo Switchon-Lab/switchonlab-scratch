@@ -8,6 +8,12 @@
  * condition types:
  *   targetSelected - 現在編集中のスプライト名が一致するか
  *   blockExists    - 指定opcodeのブロックが存在するか
+ *   hasBlockWithField - 指定opcodeのブロックのフィールド値が一致するか（プルダウン選択の検証）
+ *                    field: フィールド名（例: 'STOP_OPTION', 'KEY_OPTION'）
+ *                    value: 期待する文字列値
+ *   hasNestedBlock - 指定parentOpcodeのSUBSTACK内に指定childOpcodeのブロックが存在するか
+ *                    parentOpcode: 親ブロックのopcode（例: 'control_forever'）
+ *                    childOpcode: 子ブロックのopcode（例: 'motion_changeyby'）
  *   inputValue     - 指定opcodeのブロックの入力値が一致するか
  *                    field: 入力名（例: 'X', 'Y', 'SIZE', 'DX', 'DY'）
  *                    value: 期待する数値
@@ -126,6 +132,33 @@ const checkConditions = (vm, conditions, targetName) => {
 
             case 'blockExists':
                 return blockList.some(b => b.opcode === condition.opcode);
+
+            case 'hasBlockWithField': {
+            // プルダウン等のフィールド値を直接持つブロックを検索
+                const matchingBlocks = blockList.filter(b => b.opcode === condition.opcode);
+                return matchingBlocks.some(block => {
+                    if (!block.fields) return false;
+                    const field = block.fields[condition.field];
+                    if (!field) return false;
+                    return String(field.value) === String(condition.value);
+                });
+            }
+
+            case 'hasNestedBlock': {
+            // parentOpcodeのSUBSTACKをたどってchildOpcodeのブロックを探す
+                const parentBlocks = blockList.filter(b => b.opcode === condition.parentOpcode);
+                return parentBlocks.some(parentBlock => {
+                    if (!parentBlock.inputs || !parentBlock.inputs.SUBSTACK) return false;
+                    let currentId = parentBlock.inputs.SUBSTACK.block;
+                    while (currentId) {
+                        const currentBlock = blocks[currentId];
+                        if (!currentBlock) break;
+                        if (currentBlock.opcode === condition.childOpcode) return true;
+                        currentId = currentBlock.next;
+                    }
+                    return false;
+                });
+            }
 
             case 'inputValue': {
             // 同一opcodeのブロックが複数ある場合も、いずれか1つが条件を満たせばOK
