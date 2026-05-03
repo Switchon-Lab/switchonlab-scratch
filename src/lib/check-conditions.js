@@ -150,7 +150,7 @@ const checkConditions = (vm, conditions, targetName) => {
                 return matchingBlocks.some(block => {
                     // 直接フィールドを確認
                     const directField = block.fields && block.fields[condition.field];
-                    if (directField != null) {
+                    if (directField !== null && directField !== undefined) {
                         return String(directField.value) === String(condition.value);
                     }
                     // shadow 入力ブロック経由で確認（例: control_create_clone_of → CLONE_OPTION）
@@ -163,7 +163,7 @@ const checkConditions = (vm, conditions, targetName) => {
                     if (!menuBlock || !menuBlock.fields) return false;
                     const fieldObj = menuBlock.fields[condition.field] ||
                         Object.values(menuBlock.fields)[0];
-                    return fieldObj != null && String(fieldObj.value) === String(condition.value);
+                    return fieldObj !== null && fieldObj !== undefined && String(fieldObj.value) === String(condition.value);
                 });
             }
 
