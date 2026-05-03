@@ -25,6 +25,9 @@
  *                    かつそのブロックのfieldがvalueと一致するか
  *                    parentOpcode: 親ブロックのopcode, childOpcode: 子ブロックのopcode
  *                    field: 入力名（例: 'DURATION'）, value: 期待する数値
+ *   hasBlockInInput  - parentOpcodeのブロックの指定inputKeyに childOpcode が直接接続されているか
+ *                    parentOpcode: 親ブロックのopcode, inputKey: 入力名（例: 'CONDITION'）
+ *                    childOpcode: 期待する子ブロックのopcode
  *   inputValue     - 指定opcodeのブロックの入力値が一致するか
  *                    field: 入力名（例: 'X', 'Y', 'SIZE', 'DX', 'DY'）
  *                    value: 期待する数値
@@ -215,6 +218,20 @@ const checkConditions = (vm, conditions, targetName) => {
                         currentId = currentBlock.next;
                     }
                     return false;
+                });
+            }
+
+            case 'hasBlockInInput': {
+            // parentOpcodeのブロックの指定inputKeyにchildOpcodeのブロックが直接接続されているか確認
+                const parentBlocks = blockList.filter(b => b.opcode === condition.parentOpcode);
+                return parentBlocks.some(parent => {
+                    if (!parent.inputs) return false;
+                    const input = parent.inputs[condition.inputKey];
+                    if (!input) return false;
+                    const childId = input.block || input.shadow;
+                    if (!childId) return false;
+                    const child = blocks[childId];
+                    return !!(child && child.opcode === condition.childOpcode);
                 });
             }
 
