@@ -145,13 +145,25 @@ const checkConditions = (vm, conditions, targetName) => {
                 return blockList.some(b => b.opcode === condition.opcode);
 
             case 'hasBlockWithField': {
-            // プルダウン等のフィールド値を直接持つブロックを検索
+            // プルダウン等のフィールド値を検索（直接フィールド、またはshadow入力ブロック経由）
                 const matchingBlocks = blockList.filter(b => b.opcode === condition.opcode);
                 return matchingBlocks.some(block => {
-                    if (!block.fields) return false;
-                    const field = block.fields[condition.field];
-                    if (!field) return false;
-                    return String(field.value) === String(condition.value);
+                    // 直接フィールドを確認
+                    const directField = block.fields && block.fields[condition.field];
+                    if (directField != null) {
+                        return String(directField.value) === String(condition.value);
+                    }
+                    // shadow 入力ブロック経由で確認（例: control_create_clone_of → CLONE_OPTION）
+                    if (!block.inputs) return false;
+                    const input = block.inputs[condition.field];
+                    if (!input) return false;
+                    const menuId = input.block || input.shadow;
+                    if (!menuId) return false;
+                    const menuBlock = blocks[menuId];
+                    if (!menuBlock || !menuBlock.fields) return false;
+                    const fieldObj = menuBlock.fields[condition.field] ||
+                        Object.values(menuBlock.fields)[0];
+                    return fieldObj != null && String(fieldObj.value) === String(condition.value);
                 });
             }
 
