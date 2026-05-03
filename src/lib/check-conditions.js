@@ -14,6 +14,10 @@
  *   ifKeyInForever - control_foreverのSUBSTACK内のcontrol_ifのCONDITIONが
  *                    指定キーのsensing_keypressedであるか（keyで指定）
  *                    ※ keyPressed は全ブロック横断のため他箇所のキーにも反応してしまう
+ *   waitUntilNotKey - control_wait_until の CONDITION が operator_not → sensing_keypressed(key) であるか
+ *                    key: 期待するキー値（例: 'space'）
+ *   soundPlayWithName - sound_play が指定の音名を使用しているか
+ *                    name: 期待する音名（例: 'Low Whoosh'）
  *   hasNestedBlock - 指定parentOpcodeのSUBSTACK内に指定childOpcodeのブロックが存在するか
  *                    parentOpcode: 親ブロックのopcode（例: 'control_forever'）
  *                    childOpcode: 子ブロックのopcode（例: 'motion_changeyby'）
@@ -297,6 +301,39 @@ const checkConditions = (vm, conditions, targetName) => {
                     Object.values(valueBlock.fields)[0];
                     const fieldExists = fieldObj !== null && fieldObj !== void 0;
                     return fieldExists && String(fieldObj.value) === String(condition.value);
+                });
+            }
+
+            case 'waitUntilNotKey': {
+            // control_wait_until の CONDITION が operator_not → sensing_keypressed(key) であるか確認
+                const waitBlocks = blockList.filter(b => b.opcode === 'control_wait_until');
+                return waitBlocks.some(waitBlock => {
+                    if (!waitBlock.inputs || !waitBlock.inputs.CONDITION) return false;
+                    const notBlock = blocks[waitBlock.inputs.CONDITION.block];
+                    if (!notBlock || notBlock.opcode !== 'operator_not') return false;
+                    if (!notBlock.inputs || !notBlock.inputs.OPERAND) return false;
+                    const keypressedBlock = blocks[notBlock.inputs.OPERAND.block];
+                    if (!keypressedBlock || keypressedBlock.opcode !== 'sensing_keypressed') return false;
+                    if (!keypressedBlock.inputs || !keypressedBlock.inputs.KEY_OPTION) return false;
+                    const menuId = keypressedBlock.inputs.KEY_OPTION.block ||
+                                   keypressedBlock.inputs.KEY_OPTION.shadow;
+                    const menuBlock = menuId && blocks[menuId];
+                    return !!(menuBlock && menuBlock.fields &&
+                        menuBlock.fields.KEY_OPTION &&
+                        menuBlock.fields.KEY_OPTION.value === condition.key);
+                });
+            }
+
+            case 'soundPlayWithName': {
+            // sound_play の SOUND_MENU 入力（sound_sounds_menu）のフィールド値を確認
+                const soundPlayBlocks = blockList.filter(b => b.opcode === 'sound_play');
+                return soundPlayBlocks.some(block => {
+                    if (!block.inputs || !block.inputs.SOUND_MENU) return false;
+                    const menuId = block.inputs.SOUND_MENU.block || block.inputs.SOUND_MENU.shadow;
+                    if (!menuId) return false;
+                    const menuBlock = blocks[menuId];
+                    if (!menuBlock || !menuBlock.fields || !menuBlock.fields.SOUND_MENU) return false;
+                    return menuBlock.fields.SOUND_MENU.value === condition.name;
                 });
             }
 
