@@ -150,7 +150,7 @@ const checkConditions = (vm, conditions, targetName) => {
                 return matchingBlocks.some(block => {
                     // 直接フィールドを確認
                     const directField = block.fields && block.fields[condition.field];
-                    if (directField !== null && directField !== undefined) {
+                    if (directField !== null && directField !== void 0) {
                         return String(directField.value) === String(condition.value);
                     }
                     // shadow 入力ブロック経由で確認（例: control_create_clone_of → CLONE_OPTION）
@@ -163,7 +163,8 @@ const checkConditions = (vm, conditions, targetName) => {
                     if (!menuBlock || !menuBlock.fields) return false;
                     const fieldObj = menuBlock.fields[condition.field] ||
                         Object.values(menuBlock.fields)[0];
-                    return fieldObj !== null && fieldObj !== undefined && String(fieldObj.value) === String(condition.value);
+                    const fieldExists = fieldObj !== null && fieldObj !== void 0;
+                    return fieldExists && String(fieldObj.value) === String(condition.value);
                 });
             }
 
@@ -202,9 +203,9 @@ const checkConditions = (vm, conditions, targetName) => {
             // parentOpcodeのSUBSTACK（Cブロック）またはnext（ハットブロック）をたどってchildOpcodeを探す
                 const parentBlocks = blockList.filter(b => b.opcode === condition.parentOpcode);
                 return parentBlocks.some(parentBlock => {
-                    const startId = (parentBlock.inputs && parentBlock.inputs.SUBSTACK)
-                        ? parentBlock.inputs.SUBSTACK.block
-                        : parentBlock.next;
+                    const startId = (parentBlock.inputs && parentBlock.inputs.SUBSTACK) ?
+                        parentBlock.inputs.SUBSTACK.block :
+                        parentBlock.next;
                     if (!startId) return false;
                     let currentId = startId;
                     while (currentId) {
@@ -232,9 +233,9 @@ const checkConditions = (vm, conditions, targetName) => {
                 };
                 const parentBlocks = blockList.filter(b => b.opcode === condition.parentOpcode);
                 return parentBlocks.some(parentBlock => {
-                    const startId = (parentBlock.inputs && parentBlock.inputs.SUBSTACK)
-                        ? parentBlock.inputs.SUBSTACK.block
-                        : parentBlock.next;
+                    const startId = (parentBlock.inputs && parentBlock.inputs.SUBSTACK) ?
+                        parentBlock.inputs.SUBSTACK.block :
+                        parentBlock.next;
                     if (!startId) return false;
                     let currentId = startId;
                     while (currentId) {
