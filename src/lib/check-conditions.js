@@ -11,6 +11,9 @@
  *   hasBlockWithField - 指定opcodeのブロックのフィールド値が一致するか（プルダウン選択の検証）
  *                    field: フィールド名（例: 'STOP_OPTION', 'KEY_OPTION'）
  *                    value: 期待する文字列値
+ *   ifKeyInForever - control_foreverのSUBSTACK内のcontrol_ifのCONDITIONが
+ *                    指定キーのsensing_keypressedであるか（keyで指定）
+ *                    ※ keyPressed は全ブロック横断のため他箇所のキーにも反応してしまう
  *   hasNestedBlock - 指定parentOpcodeのSUBSTACK内に指定childOpcodeのブロックが存在するか
  *                    parentOpcode: 親ブロックのopcode（例: 'control_forever'）
  *                    childOpcode: 子ブロックのopcode（例: 'motion_changeyby'）
@@ -145,6 +148,37 @@ const checkConditions = (vm, conditions, targetName) => {
                     const field = block.fields[condition.field];
                     if (!field) return false;
                     return String(field.value) === String(condition.value);
+                });
+            }
+
+            case 'ifKeyInForever': {
+            // control_forever のSUBSTACK内のcontrol_ifのCONDITIONが
+            // 指定キーのsensing_keypressedであるか確認
+                const foreverBlocks = blockList.filter(b => b.opcode === 'control_forever');
+                return foreverBlocks.some(foreverBlock => {
+                    if (!foreverBlock.inputs || !foreverBlock.inputs.SUBSTACK) return false;
+                    let currentId = foreverBlock.inputs.SUBSTACK.block;
+                    while (currentId) {
+                        const currentBlock = blocks[currentId];
+                        if (!currentBlock) break;
+                        if (currentBlock.opcode === 'control_if' &&
+                            currentBlock.inputs && currentBlock.inputs.CONDITION) {
+                            const condBlock = blocks[currentBlock.inputs.CONDITION.block];
+                            if (condBlock && condBlock.opcode === 'sensing_keypressed' &&
+                                condBlock.inputs && condBlock.inputs.KEY_OPTION) {
+                                const menuId = condBlock.inputs.KEY_OPTION.block ||
+                                               condBlock.inputs.KEY_OPTION.shadow;
+                                const menuBlock = menuId && blocks[menuId];
+                                if (menuBlock && menuBlock.fields &&
+                                    menuBlock.fields.KEY_OPTION &&
+                                    menuBlock.fields.KEY_OPTION.value === condition.key) {
+                                    return true;
+                                }
+                            }
+                        }
+                        currentId = currentBlock.next;
+                    }
+                    return false;
                 });
             }
 
