@@ -30,14 +30,14 @@ jobs:
 
             - name: Copy content files into scratch
               run: |
-                  mkdir -p public/navigator src/assets/scenarios public/projects public/hints
+                  mkdir -p public/navigator src/assets/scenarios src/assets/scenarios/apple-catch public/projects public/hints
                   cp -r _content/navigator/asuka/. public/navigator/
-                  cp -r _content/scenarios/apple-catch/. src/assets/scenarios/
-                  cp -r _content/projects/apple-catch/. public/projects/
-                  cp -r _content/hints/apple-catch/. public/hints/
                   cp -r _content/scenarios/flappy-hippo/. src/assets/scenarios/
+                  cp -r _content/scenarios/apple-catch/. src/assets/scenarios/apple-catch/
                   cp -r _content/projects/flappy-hippo/. public/projects/
+                  cp -r _content/projects/apple-catch/. public/projects/
                   cp -r _content/hints/flappy-hippo/. public/hints/
+                  cp -r _content/hints/apple-catch/. public/hints/
 
             - uses: actions/setup-node@26961cf329f22f6837d5f54c3efd76b480300ace # v4
               with:
