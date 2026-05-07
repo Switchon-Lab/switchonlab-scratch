@@ -22,7 +22,10 @@ const contentRoot = path.resolve(__dirname, '../../switchonlab-content');
 
 copyDir(path.join(contentRoot, 'navigator/asuka'), 'public/navigator');
 copyDir(path.join(contentRoot, 'scenarios/flappy-hippo'), 'src/assets/scenarios');
+copyDir(path.join(contentRoot, 'scenarios/apple-catch'), 'src/assets/scenarios/apple-catch');
 copyDir(path.join(contentRoot, 'projects/flappy-hippo'), 'public/projects');
+copyDir(path.join(contentRoot, 'projects/apple-catch'), 'public/projects');
 copyDir(path.join(contentRoot, 'hints/flappy-hippo'), 'public/hints');
+copyDir(path.join(contentRoot, 'hints/apple-catch'), 'public/hints');
 
 console.log('コンテンツのコピーが完了しました。');
