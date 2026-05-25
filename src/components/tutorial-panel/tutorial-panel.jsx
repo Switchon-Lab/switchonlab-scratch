@@ -131,13 +131,8 @@ const TutorialPanel = ({scenario, vm}) => {
             .catch(() => setAuthStatus('blocked'));
     }, []);
 
-    const {steps, success, failure, title, id, lessons} = scenario;
-    const totalSteps = steps.length;
-    const isLastStep = currentStep === totalSteps - 1;
-    const step = steps[currentStep];
-    const hasHint = step.hintImage || step.hintNote;
-    const panelTitle = id ? `${id}: ${title}` : title;
-    const lessonNo = id ? parseInt(id.replace(/\D/g, ''), 10) : 0;
+    // scenario が null の場合も null-safe に参照（hooks は条件分岐より前に置く必要があるため）
+    const step = scenario ? scenario.steps[currentStep] : null;
 
     const handlePrev = useCallback(() => {
         setCurrentStep(i => i - 1);
@@ -152,6 +147,7 @@ const TutorialPanel = ({scenario, vm}) => {
     }, []);
 
     const handleCheck = useCallback(() => {
+        if (!step) return;
         const passed = checkConditions(vm, step.conditions, step.targetName);
         setResult(passed ? 'success' : 'failure');
         setShowConceptModal(false);
@@ -175,10 +171,11 @@ const TutorialPanel = ({scenario, vm}) => {
     }, []);
     const handleCloseConceptModal = useCallback(() => setShowConceptModal(false), []);
 
-    if (authStatus === 'pending') {
+    // hooks はすべて呼び出し済み。ここから条件分岐・早期 return が可能
+    if (!scenario || authStatus === 'pending') {
         return (
             <div className={styles.tutorialPanel}>
-                <div className={styles.panelHeader}>{panelTitle}</div>
+                <div className={styles.panelHeader}>{'SwitchOnLab'}</div>
                 <div className={styles.authState}>{'読み込み中…'}</div>
             </div>
         );
@@ -195,6 +192,14 @@ const TutorialPanel = ({scenario, vm}) => {
             </div>
         );
     }
+
+    // ここに到達した時点で scenario は非 null かつ認証済み
+    const {steps, success, failure, title, id, lessons} = scenario;
+    const totalSteps = steps.length;
+    const isLastStep = currentStep === totalSteps - 1;
+    const hasHint = step.hintImage || step.hintNote;
+    const panelTitle = id ? `${id}: ${title}` : title;
+    const lessonNo = id ? parseInt(id.replace(/\D/g, ''), 10) : 0;
 
     if (result) {
         const resultData = result === 'success' ? success : failure;
