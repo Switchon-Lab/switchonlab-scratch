@@ -115,9 +115,9 @@ const TutorialPanel = ({scenario, vm}) => {
         const params = new URLSearchParams(window.location.search);
         const project = params.get('project');
         const token = params.get('token');
-        const ts = params.get('ts');
+        const expires = params.get('expires');
 
-        if (!token || !ts) {
+        if (!token || !expires) {
             setAuthStatus('blocked');
             return;
         }
@@ -125,7 +125,7 @@ const TutorialPanel = ({scenario, vm}) => {
         fetch('/api/verify', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({project, token, ts})
+            body: JSON.stringify({project, token, expires})
         })
             .then(res => setAuthStatus(res.ok ? 'ok' : 'blocked'))
             .catch(() => setAuthStatus('blocked'));

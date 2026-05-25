@@ -11,9 +11,9 @@ export default function handler(req, res) {
         return res.status(405).json({error: 'Method not allowed'});
     }
 
-    const {project, token, ts} = req.body || {};
+    const {project, token, expires} = req.body || {};
 
-    if (!project || !token || !ts) {
+    if (!project || !token || !expires) {
         return res.status(400).json({error: 'Missing required parameters'});
     }
 
@@ -24,7 +24,7 @@ export default function handler(req, res) {
 
     // タイムスタンプ検証（10分以内）
     const now = Math.floor(Date.now() / 1000);
-    const age = now - parseInt(ts, 10);
+    const age = now - parseInt(expires, 10);
     if (age < 0 || age > TOKEN_EXPIRY_SEC) {
         return res.status(401).json({error: 'Token expired'});
     }
@@ -32,7 +32,7 @@ export default function handler(req, res) {
     // HMAC検証
     const expected = crypto
         .createHmac('sha256', secret)
-        .update(`${project}:${ts}`)
+        .update(`${project}:${expires}`)
         .digest('hex');
 
     let valid = false;

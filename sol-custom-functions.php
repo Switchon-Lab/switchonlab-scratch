@@ -26,14 +26,14 @@ function sol_scratch_iframe_shortcode($atts) {
         return '<p style="color:red;">エラー: TOKEN_SECRET が設定されていません。</p>';
     }
 
-    $ts    = time();
-    $token = hash_hmac('sha256', $project . ':' . $ts, $secret);
+    $expires = time();
+    $token   = hash_hmac('sha256', $project . ':' . $expires, $secret);
 
     $url = add_query_arg(
         [
             'project' => rawurlencode($project),
             'token'   => $token,
-            'ts'      => $ts,
+            'expires' => $expires,
         ],
         'https://switchonlab-scratch.vercel.app/'
     );
