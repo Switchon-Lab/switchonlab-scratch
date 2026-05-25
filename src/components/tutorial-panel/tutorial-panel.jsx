@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import VM from 'scratch-vm';
@@ -103,12 +103,33 @@ const formatBody = (text, keyPrefix) => {
 const CONCEPT_IMAGES = ['asuka_joy', 'asuka_smile2', 'asuka_surprise'];
 
 const TutorialPanel = ({scenario, vm}) => {
+    const [authStatus, setAuthStatus] = useState('pending'); // 'pending' | 'ok' | 'blocked'
     const [currentStep, setCurrentStep] = useState(0);
     const [showConceptModal, setShowConceptModal] = useState(false);
     const [showHintModal, setShowHintModal] = useState(false);
     const [result, setResult] = useState(null); // null | 'success' | 'failure'
     const [showRoadmapModal, setShowRoadmapModal] = useState(false);
     const [conceptImageKey, setConceptImageKey] = useState('asuka_surprise');
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const project = params.get('project');
+        const token = params.get('token');
+        const ts = params.get('ts');
+
+        if (!token || !ts) {
+            setAuthStatus('blocked');
+            return;
+        }
+
+        fetch('/api/verify', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({project, token, ts})
+        })
+            .then(res => setAuthStatus(res.ok ? 'ok' : 'blocked'))
+            .catch(() => setAuthStatus('blocked'));
+    }, []);
 
     const {steps, success, failure, title, id, lessons} = scenario;
     const totalSteps = steps.length;
@@ -153,6 +174,27 @@ const TutorialPanel = ({scenario, vm}) => {
         setShowConceptModal(true);
     }, []);
     const handleCloseConceptModal = useCallback(() => setShowConceptModal(false), []);
+
+    if (authStatus === 'pending') {
+        return (
+            <div className={styles.tutorialPanel}>
+                <div className={styles.panelHeader}>{panelTitle}</div>
+                <div className={styles.authState}>{'読み込み中…'}</div>
+            </div>
+        );
+    }
+
+    if (authStatus === 'blocked') {
+        return (
+            <div className={styles.tutorialPanel}>
+                <div className={styles.panelHeader}>{'アクセスエラー'}</div>
+                <div className={styles.authState}>
+                    {'このページは直接アクセスできません。'}<br />
+                    {'学習サイトから開いてください。'}
+                </div>
+            </div>
+        );
+    }
 
     if (result) {
         const resultData = result === 'success' ? success : failure;

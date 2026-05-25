@@ -10,6 +10,18 @@
     z-index: 10;
 }
 
+.authState {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.8;
+}
+
 .topArea {
     flex-shrink: 0;
 }
