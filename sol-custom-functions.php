@@ -31,7 +31,7 @@ function sol_scratch_iframe_shortcode($atts) {
 
     $url = add_query_arg(
         [
-            'project' => rawurlencode($project),
+            'project' => $project,
             'token'   => $token,
             'expires' => $expires,
         ],

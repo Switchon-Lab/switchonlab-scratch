@@ -18,6 +18,9 @@ export default function handler(req, res) {
     }
 
     const secret = process.env.TOKEN_SECRET;
+    // [DEBUG] 環境変数・受信値の確認（確認後に削除すること）
+    console.log('[verify] secret loaded:', !!secret, '| secret length:', secret ? secret.length : 0);
+    console.log('[verify] project:', project, '| expires:', expires, '| token:', token);
     if (!secret) {
         return res.status(500).json({error: 'Server configuration error'});
     }
@@ -26,6 +29,7 @@ export default function handler(req, res) {
     const now = Math.floor(Date.now() / 1000);
     const age = now - parseInt(expires, 10);
     if (age < 0 || age > TOKEN_EXPIRY_SEC) {
+        console.log('[verify] token expired: age=', age);
         return res.status(401).json({error: 'Token expired'});
     }
 
@@ -34,6 +38,7 @@ export default function handler(req, res) {
         .createHmac('sha256', secret)
         .update(`${project}:${expires}`)
         .digest('hex');
+    console.log('[verify] expected:', expected, '| received token:', token);
 
     let valid = false;
     try {
