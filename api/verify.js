@@ -2,7 +2,13 @@ import crypto from 'crypto';
 
 const TOKEN_EXPIRY_SEC = 600; // 10分
 
-export default function handler(req, res) {
+/**
+ * Vercel serverless function to verify HMAC token for iframe access control.
+ * @param {object} req - Incoming HTTP request containing project, token, and expires in body.
+ * @param {object} res - HTTP response object.
+ * @returns {void} Sends JSON response with 200 on success or 4xx/5xx on failure.
+ */
+export default function handler (req, res) {
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
