@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-const TOKEN_EXPIRY_SEC = 600; // 10分
+const TOKEN_EXPIRY_SEC = 7200; // ±3600秒（サーバー間時刻ずれを考慮）
 
 /**
  * Vercel serverless function to verify HMAC token for iframe access control.
@@ -33,8 +33,8 @@ export default function handler (req, res) {
 
     // タイムスタンプ検証（10分以内）
     const now = Math.floor(Date.now() / 1000);
-    const age = now - parseInt(expires, 10);
-    if (age < 0 || age > TOKEN_EXPIRY_SEC) {
+    const age = Math.abs(now - parseInt(expires, 10));
+    if (age > TOKEN_EXPIRY_SEC) {
         console.log('[verify] token expired: age=', age);
         return res.status(401).json({error: 'Token expired'});
     }
