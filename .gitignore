@@ -27,6 +27,9 @@ npm-*
 # for act
 .secrets
 
+# Claude Code local settings
+.claude/settings.local.json
+
 
 # 教材コンテンツ（非公開・switchonlab-contentで管理）
 src/assets/navigator/
